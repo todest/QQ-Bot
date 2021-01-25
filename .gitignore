@@ -1,0 +1,5 @@
+# settings
+settings.py
+
+# pycache
+__pycache__/*
