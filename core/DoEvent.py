@@ -1,7 +1,7 @@
 from settings import *
-from plugin.Jrrp import *
-from plugin.BotUtil import *
-from plugin.McServerStatus import *
+from ..plugin.Jrrp import *
+from ..plugin.BotUtil import *
+from ..plugin.McServerStatus import *
 from graia.application.friend import Friend
 from graia.application.group import Group, Member
 from graia.application.message.chain import MessageChain
