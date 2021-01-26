@@ -1,26 +1,23 @@
 import requests
-import json as js
-import random
+import json
 
-def getNews(number:int = 5) -> str:
-    api = "https://api.readhub.cn/topic?lastCursor=&pageSize=" + str(number)
-    req = requests.get(url=api)
-    # print("status_code: ", req.status_code)
-    if req.status_code != 200:
-        return "".join("HTTP GET ERROR!")
 
-    newsDigest = ""
+def getNews(number) -> str:
+	number = number if number else '5'
+	assert number.isdigit()
+	assert int(number) in range(1, 21)
+	api = "https://api.readhub.cn/topic?lastCursor=&pageSize=" + number
+	req = requests.get(url=api)
+	if req.status_code != 200:
+		return "".join("HTTP GET ERROR!")
+	news_digest = ""
+	resp_json = json.loads(req.text)
+	news_list = resp_json["data"]
+	for news in news_list:
+		cur_news = news["title"] + "\r\n\r\n"
+		news_digest += cur_news
+	return news_digest
 
-    json = js.loads(req.text)
-
-    newsList = json["data"]
-
-    for news in newsList:
-        # print(news["title"])
-        # print(news["summary"])
-        curNews = news["title"] + "\r\n\r\n"
-        newsDigest += curNews
-    return newsDigest
 
 if __name__ == '__main__':
-    print(getNews())
+	print(getNews('1'))

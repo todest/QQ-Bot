@@ -39,7 +39,7 @@ class DoEvent:
 		elif msg.startswith('.mcinfo'):
 			await self.__do_mcinfo(msg)
 		elif msg.startswith('.say'):
-			await self._do_say(msg)
+			await self.__do_say(msg)
 		elif msg.startswith('.news'):
 			await self.__do_news(msg)
 
@@ -58,8 +58,8 @@ class DoEvent:
 			".help\t显示帮助指令\r\n"
 			".jrrp\t今日人品\r\n"
 			".say [type]/[help]\t一言\r\n"
-			".mcinfo [host] [port] [timeout]\t显示MC服务器状态"
-			".news [number]\t科技新闻\r\n"
+			".mcinfo [host] [port] [timeout]\t显示MC服务器状态\r\n"
+			".news [number]\t科技新闻"
 		)]
 		await self.__do_send(resp)
 
@@ -84,7 +84,7 @@ class DoEvent:
 			print(e)
 			await self.__do_error()
 
-	async def _do_say(self, msg):
+	async def __do_say(self, msg):
 		msg = parseArgs(msg)
 		if msg:
 			msg = msg[0]
@@ -100,23 +100,17 @@ class DoEvent:
 		except Exception as e:
 			print(e)
 			await self.__do_error()
+
 	async def __do_news(self, msg):
 		msg = parseArgs(msg)
 		if msg:
 			msg = msg[0]
-			if not isinstance(msg, int):
-				await self.__do_send([Plain('请输入正整数！')])
-				return
-			elif not 1 <= msg:
-				await self.__do_send([Plain('请输入正整数！')])
-			elif not msg <= 20:
-				await self.__do_send([Plain('请输入 20 以下的正整数！')])
 		try:
-			resp = [Plain(getNews())]
+			resp = [Plain(getNews(msg))]
 			await self.__do_send(resp)
 		except AssertionError as e:
 			print(e)
-			await self.__do_send(Plain('参数错误！'))
+			await self.__do_send([Plain('输入参数错误！')])
 		except Exception as e:
 			print(e)
 			await self.__do_error()
