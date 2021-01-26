@@ -1,8 +1,8 @@
+import time
+import json
 import socket
 import struct
-import json
 import jsonpath
-import time
 
 
 class StatusPing:
