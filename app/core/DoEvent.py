@@ -103,7 +103,7 @@ class DoEvent:
 	async def __do_news(self, msg):
 		msg = parseArgs(msg)
 		if msg:
-			msg = msg[0]
+			msg = int(msg[0])
 			if not isinstance(msg, int):
 				await self.__do_send([Plain('请输入正整数！')])
 				return
@@ -112,7 +112,10 @@ class DoEvent:
 			elif not msg <= 20:
 				await self.__do_send([Plain('请输入 20 以下的正整数！')])
 		try:
-			resp = [Plain(getNews())]
+			if msg:
+				resp = [Plain(getNews(msg))]
+			else:
+				resp = [Plain(getNews())]
 			await self.__do_send(resp)
 		except AssertionError as e:
 			print(e)
