@@ -1,5 +1,5 @@
-from core.settings import *
-from core.DoEvent import DoEvent
+from app.core.settings import *
+from app.core.DoEvent import DoEvent
 from graia.application.friend import Friend
 from graia.application.group import Group, Member
 from graia.application.message.chain import MessageChain
