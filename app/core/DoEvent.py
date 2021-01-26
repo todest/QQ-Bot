@@ -4,6 +4,7 @@ from ..plugin.Readhub import *
 from ..plugin.BotUtil import *
 from ..plugin.Hitokoto import *
 from ..plugin.McServerStatus import *
+from ..plugin.AI import *
 from graia.application.friend import Friend
 from graia.application.group import Group, Member
 from graia.application.message.chain import MessageChain
@@ -42,6 +43,8 @@ class DoEvent:
 			await self.__do_say(msg)
 		elif msg.startswith('.news'):
 			await self.__do_news(msg)
+		elif msg.startswith('.ai'):
+			await self.__do_ai(msg)
 
 	async def __do_send(self, resp):
 		if isinstance(self.source, Friend):
@@ -60,6 +63,7 @@ class DoEvent:
 			".say [type]/[help]\t一言\r\n"
 			".mcinfo [host] [port] [timeout]\t显示MC服务器状态\r\n"
 			".news [number](1~20)\t科技新闻"
+			".ai [category] [paperNum] *[item]/[help]\t获取AI论文\r\n"
 		)]
 		await self.__do_send(resp)
 
@@ -107,6 +111,27 @@ class DoEvent:
 			msg = msg[0]
 		try:
 			resp = [Plain(getNews(msg))]
+			await self.__do_send(resp)
+		except AssertionError as e:
+			print(e)
+			await self.__do_send([Plain('输入参数错误！')])
+		except Exception as e:
+			print(e)
+			await self.__do_error()
+
+	async def __do_ai(self, msg):
+		msg = parseArgs(msg)
+		try:
+			if msg:
+				category = msg[0]
+				if category == 'help':
+					await self.__do_send([Plain(AI.getAIHelp())])
+				paperNum = msg[1]
+				if msg.__len__ == 3:
+					item = msg[2]
+					resp = [Plain(AI(category, paperNum, item).print_AI())]
+				else:
+					resp = [Plain(AI(category, paperNum).print_AI())]
 			await self.__do_send(resp)
 		except AssertionError as e:
 			print(e)
