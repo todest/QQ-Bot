@@ -2,5 +2,6 @@ __all__ = [
 	'BotUtil',
 	'Jrrp',
 	'McServerStatus',
-	'Hitokoto'
+	'Hitokoto',
+	'Readhub.py'
 ]
