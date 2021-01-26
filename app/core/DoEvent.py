@@ -3,6 +3,7 @@ from ..plugin.Jrrp import *
 from ..plugin.BotUtil import *
 from ..plugin.Hitokoto import *
 from ..plugin.McServerStatus import *
+from ..plugin.Readhub import *
 from graia.application.friend import Friend
 from graia.application.group import Group, Member
 from graia.application.message.chain import MessageChain
@@ -38,7 +39,9 @@ class DoEvent:
 		elif msg.startswith('.mcinfo'):
 			await self.__do_mcinfo(msg)
 		elif msg.startswith('.say'):
-			await self._do_say(msg)
+			await self.__do_say(msg)
+		elif msg.startswith('.news'):
+			await self.__do_news(msg)
 
 	async def __do_send(self, resp):
 		if isinstance(self.source, Friend):
@@ -55,7 +58,8 @@ class DoEvent:
 			".help\t显示帮助指令\r\n"
 			".jrrp\t今日人品\r\n"
 			".say [type]/[help]\t一言\r\n"
-			".mcinfo [host] [port] [timeout]\t显示MC服务器状态"
+			".mcinfo [host] [port] [timeout]\t显示MC服务器状态\r\n"
+			".news [number]\t科技新闻"
 		)]
 		await self.__do_send(resp)
 
@@ -80,7 +84,7 @@ class DoEvent:
 			print(e)
 			await self.__do_error()
 
-	async def _do_say(self, msg):
+	async def __do_say(self, msg):
 		msg = parseArgs(msg)
 		if msg:
 			msg = msg[0]
@@ -89,6 +93,20 @@ class DoEvent:
 				return
 		try:
 			resp = [Plain(getHitokoto(msg))]
+			await self.__do_send(resp)
+		except AssertionError as e:
+			print(e)
+			await self.__do_send([Plain('输入参数错误！')])
+		except Exception as e:
+			print(e)
+			await self.__do_error()
+
+	async def __do_news(self, msg):
+		msg = parseArgs(msg)
+		if msg:
+			msg = msg[0]
+		try:
+			resp = [Plain(getNews(msg))]
 			await self.__do_send(resp)
 		except AssertionError as e:
 			print(e)
