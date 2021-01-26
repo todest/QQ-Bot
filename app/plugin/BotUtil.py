@@ -4,3 +4,9 @@ def parseArgs(plain_str) -> list:
 		args[i].strip()
 	args.pop(0)
 	return args
+
+
+if __name__ == '__main__':
+	res = parseArgs(".jrrp")
+	if res:
+		print(res)
