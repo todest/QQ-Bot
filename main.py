@@ -66,11 +66,13 @@ class DoEvent:
 		try:
 			resp = [Plain(StatusPing(*msg).get_status(str_format=True))]
 			await self._do_send(resp)
-		except WindowsError:
 			await self._do_send([Plain("未能连接到服务器，可能服务器已关闭！")])
+		except EnvironmentError as e:
+			print(e)
+			await self._do_send([Plain('由于目标计算机积极拒绝，无法连接。')])
 		except Exception as e:
 			print(e)
-			await self._do_send([Plain('未知错误！')])
+			await self._do_send([Plain('未知错误，请联系管理员！')])
 
 
 @bcc.receiver("FriendMessage")
