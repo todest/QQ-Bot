@@ -59,7 +59,7 @@ class DoEvent:
 			".jrrp\t今日人品\r\n"
 			".say [type]/[help]\t一言\r\n"
 			".mcinfo [host] [port] [timeout]\t显示MC服务器状态\r\n"
-			".news [number]\t科技新闻"
+			".news [number](1~20)\t科技新闻"
 		)]
 		await self.__do_send(resp)
 
