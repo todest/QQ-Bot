@@ -1,4 +1,4 @@
-from settings import *
+from .settings import *
 from ..plugin.Jrrp import *
 from ..plugin.BotUtil import *
 from ..plugin.McServerStatus import *
