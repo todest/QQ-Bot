@@ -1,4 +1,4 @@
-def parseArgs(plain_str) -> list:
+def parse_args(plain_str) -> list:
 	args = plain_str.strip().split()
 	for i in range(len(args)):
 		args[i].strip()
@@ -7,6 +7,6 @@ def parseArgs(plain_str) -> list:
 
 
 if __name__ == '__main__':
-	res = parseArgs(".jrrp")
+	res = parse_args(".jrrp")
 	if res:
 		print(res)

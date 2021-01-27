@@ -1,4 +1,4 @@
 __all__ = [
-	'DoEvent',
+	'controller',
 	'settings'
 ]

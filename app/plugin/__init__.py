@@ -1,7 +1,7 @@
 __all__ = [
-	'BotUtil',
-	'Jrrp',
-	'McServerStatus',
-	'Hitokoto',
-	'Readhub'
+	'base',
+	'jrrp',
+	'hitokoto',
+	'mcinfo',
+	'readhub',
 ]

@@ -2,7 +2,12 @@ import time
 import json
 import socket
 import struct
+
 import jsonpath
+from app.plugin.base import Plugin
+from graia.application import MessageChain
+
+from graia.application.message.elements.internal import Plain
 
 
 class StatusPing:
@@ -130,8 +135,32 @@ class StatusPing:
 		return response
 
 
+class McStatus(Plugin):
+	cmd = '.mc'
+	brief_help = cmd + ' [ip] [port] [timeout]\t获取MC服务器状态\r\n'
+	full_help = \
+		'ip: MC服务器域名或IP\r\n' \
+		'port: MC服务器端口号\r\n' \
+		'timeout: 设置超时时间'
+
+	def process(self):
+		try:
+			self.resp = MessageChain.create([Plain(
+				StatusPing(*self.msg).get_status(str_format=True)
+			)])
+		except EnvironmentError as e:
+			print(e)
+			self.resp = MessageChain.create([Plain(
+				'由于目标计算机积极拒绝，无法连接。服务器可能已关闭。'
+			)])
+		except ValueError as e:
+			print(e)
+			self.arg_type_error()
+		except Exception as e:
+			print(e)
+			self.unkown_error()
+
+
 if __name__ == '__main__':
-	status = StatusPing('pipakacha.com')
-	# status = StatusPing('mc.hypixel.net')
-	result = status.get_status(str_format=True)
-	print(result)
+	a = McStatus('.mc')
+	print(a.get_resp())

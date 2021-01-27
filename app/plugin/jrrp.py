@@ -1,18 +1,27 @@
 import time
 import math
 import random
+from app.plugin.base import Plugin
+from graia.application import MessageChain
+from graia.application.message.elements.internal import Plain, At
 
 
 def f(x, mul, sigma):
 	return 5000 * (1.0 / (math.sqrt(2 * math.pi) * sigma) * (math.e ** (-(x - mul) ** 2 / (2 * sigma * sigma))))
 
 
-class Jrrp:
-	def __init__(self, cid):
-		self.id = str(cid)
+class Jrrp(Plugin):
+	cmd = '.jrrp'
+	brief_help = cmd + '\t今日人品\r\n'
+	full_help = '获取你今日的人品值，人品值为百分制哦！'
+
+	def __init__(self, msg, source=None):
+		super().__init__(msg)
+		self.source = source
+		self.id = msg
 		self.date = time.strftime("%Y%m%d", time.localtime())
 
-	def get_jrrp(self) -> int:
+	def _get_jrrp(self) -> int:
 		rplist = []
 		for i in range(0, 101):
 			for j in range(int(f(i, mul=60, sigma=40))):
@@ -21,8 +30,8 @@ class Jrrp:
 		result = rplist[random.randint(0, len(rplist) - 1)]
 		return result
 
-	def print_jrrp(self) -> str:
-		result = self.get_jrrp()
+	def _print_jrrp(self) -> str:
+		result = self._get_jrrp()
 		if result == 0:
 			result = "你今天的人品值是：0，不要给我差评啊。"
 		elif 0 < result < 10:
@@ -45,8 +54,18 @@ class Jrrp:
 			result = "你今天的人品值是：%d，100! 100!! 100!!!" % result
 		return result
 
+	def process(self):
+		if self.source:
+			self.resp = MessageChain.create([
+				At(self.source),
+				Plain(' ' + self._print_jrrp())
+			])
+		else:
+			self.resp = MessageChain.create([
+				Plain(self._print_jrrp())
+			])
+
 
 if __name__ == '__main__':
-	qq = '3232'
-	jrrp = Jrrp(qq)
-	print(jrrp.print_jrrp())
+	a = Jrrp('123')
+	print(a.get_resp())
