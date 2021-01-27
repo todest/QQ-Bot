@@ -146,8 +146,8 @@ class McStatus(Plugin):
 	def process(self):
 		try:
 			self.resp = MessageChain.create([Plain(
-				StatusPing(*self.msg).get_status(str_format=True)
-			)])
+				StatusPing(*self.msg).get_status(str_format=True))
+			])
 		except EnvironmentError as e:
 			print(e)
 			self.resp = MessageChain.create([Plain(
