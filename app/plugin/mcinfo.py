@@ -137,8 +137,9 @@ class StatusPing:
 
 class McStatus(Plugin):
 	entry = '.mc'
-	brief_help = entry + ' [ip] [port] [timeout]\t获取MC服务器状态\r\n'
+	brief_help = entry + '\t获取MC服务器状态\r\n'
 	full_help = \
+		'.mc [ip] [port] [timeout]\r\n' \
 		'ip: MC服务器域名或IP\r\n' \
 		'port: MC服务器端口号\r\n' \
 		'timeout: 设置超时时间'

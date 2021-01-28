@@ -8,8 +8,8 @@ from graia.application.message.elements.internal import Plain
 
 class ReadHub(Plugin):
 	entry = '.news'
-	brief_help = entry + ' [num](1~20)\t科技新闻\r\n'
-	full_help = '获取指定数量的科技新闻信息，默认数量为5。'
+	brief_help = entry + '\t科技新闻\r\n'
+	full_help = '.news [num]\r\n获取num数量的科技新闻信息，默认数量为5。'
 
 	def _get_news(self) -> str:
 		if self.msg:
