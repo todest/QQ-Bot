@@ -25,7 +25,7 @@ class Jrrp(Plugin):
 		for i in range(0, 101):
 			for j in range(int(f(i, mul=60, sigma=40))):
 				rplist.append(i)
-		random.seed(self.source + self.date)
+		random.seed(str(self.source) + self.date)
 		result = rplist[random.randint(0, len(rplist) - 1)]
 		return result
 
