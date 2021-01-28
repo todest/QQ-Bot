@@ -18,7 +18,6 @@ class Jrrp(Plugin):
 	def __init__(self, msg, source=None):
 		super().__init__(msg)
 		self.source = source
-		self.id = msg
 		self.date = time.strftime("%Y%m%d", time.localtime())
 
 	def _get_jrrp(self) -> int:
@@ -26,7 +25,7 @@ class Jrrp(Plugin):
 		for i in range(0, 101):
 			for j in range(int(f(i, mul=60, sigma=40))):
 				rplist.append(i)
-		random.seed(self.id + self.date)
+		random.seed(self.source + self.date)
 		result = rplist[random.randint(0, len(rplist) - 1)]
 		return result
 
@@ -67,5 +66,5 @@ class Jrrp(Plugin):
 
 
 if __name__ == '__main__':
-	a = Jrrp('123')
+	a = Jrrp('123', '12123')
 	print(a.get_resp())
