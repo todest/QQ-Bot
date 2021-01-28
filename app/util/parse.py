@@ -1,3 +1,4 @@
+# 拆分指令参数为一个列表，并去除入口指令
 def parse_args(plain_str) -> list:
 	args = plain_str.strip().split()
 	for i in range(len(args)):

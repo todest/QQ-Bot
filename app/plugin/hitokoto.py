@@ -5,8 +5,8 @@ from graia.application.message.elements.internal import Plain
 
 
 class Hitokoto(Plugin):
-	cmd = '.say'
-	brief_help = cmd + ' [type]\t一言\r\n'
+	entry = '.say'
+	brief_help = entry + ' [type]\t一言\r\n'
 	full_help = \
 		"a\t动画\r\n" \
 		"b\t漫画\r\n" \

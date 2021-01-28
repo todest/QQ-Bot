@@ -11,8 +11,8 @@ def f(x, mul, sigma):
 
 
 class Jrrp(Plugin):
-	cmd = '.jrrp'
-	brief_help = cmd + '\t今日人品\r\n'
+	entry = '.jrrp'
+	brief_help = entry + '\t今日人品\r\n'
 	full_help = '获取你今日的人品值，人品值为百分制哦！'
 
 	def __init__(self, msg, source=None):

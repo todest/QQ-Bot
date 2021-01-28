@@ -3,9 +3,9 @@ from graia.application import MessageChain, Image
 
 
 class Test(Plugin):
-	cmd = '.wp'
-	brief_help = cmd + '\t必应壁纸\r\n'
-	full_help = '壁纸来源于必应。'
+	entry = '.wp'
+	brief_help = entry + '\t必应壁纸\r\n'
+	full_help = '随机从必应获取分辨率为1920x1080的壁纸。'
 
 	def process(self):
 		try:

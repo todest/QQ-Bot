@@ -7,7 +7,7 @@ from graia.application.message.elements.internal import Plain
 
 
 class ReadHub(Plugin):
-	cmd = '.news'
+	entry = '.news'
 	brief_help = cmd + ' [num](1~20)\t科技新闻\r\n'
 	full_help = '获取指定数量的科技新闻信息，默认数量为5。'
 
