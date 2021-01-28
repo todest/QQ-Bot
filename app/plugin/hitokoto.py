@@ -9,8 +9,8 @@ class Hitokoto(Plugin):
 	brief_help = cmd + ' [type]\t一言\r\n'
 	full_help = \
 		"a\t动画\r\n" \
-		"b\t漫画\r\nc\t" \
-		"游戏\r\n" \
+		"b\t漫画\r\n" \
+		"c\t游戏\r\n" \
 		"d\t文学\r\n" \
 		"e\t原创\r\n" \
 		"f\t来自网络\r\n" \
