@@ -1,13 +1,10 @@
-from typing import List
-
 from app.util.parse import *
 from graia.application import MessageChain
 from graia.application.message.elements.internal import Plain
 
 
 class Plugin:
-	"""
-	子类必须重写这三个属性
+	"""子类必须重写这三个属性
 
 	@:param entry: 程序入口点参数
 

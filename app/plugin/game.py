@@ -3,7 +3,7 @@ import random
 
 from app.util.dao import MysqlDao
 from app.plugin.base import Plugin
-from graia.application import MessageChain
+from graia.application import MessageChain, Group
 
 from graia.application.message.elements.internal import Plain, At
 
@@ -70,8 +70,10 @@ class User:
 
 class Game(Plugin):
 	entry = '.游戏'
-	brief_help = '游戏区'
-	full_help = '每天可以签到随机获取积分，积分值从0-100不等。'
+	brief_help = entry + '\t游戏区\r\n'
+	full_help = \
+		'.游戏 签到\t每天可以签到随机获取积分，积分值从0-100不等。\r\n' \
+		'.游戏 积分\t可以查询当前积分总量。\r\n'
 
 	def process(self):
 		if not self.msg:
@@ -80,31 +82,48 @@ class Game(Plugin):
 		if self.msg[0].startswith('签到'):
 			try:
 				point = random.randint(1, 101)
-				user = User(self.source, point)
+				user = User(self.source.id, point)
 				if user.get_sign_in_status():
-					self.resp = MessageChain.create([
-						At(self.source),
-						Plain(' 你今天已经签到过了！'),
-					])
+					if isinstance(self.source, Group):
+						self.resp = MessageChain.create([
+							At(self.source.id),
+							Plain(' 你今天已经签到过了！'),
+						])
+					else:
+						self.resp = MessageChain.create([
+							Plain(' 你今天已经签到过了！'),
+						])
 				else:
 					user.sign_in()
-					self.resp = MessageChain.create([
-						At(self.source),
-						Plain(' 签到成功，%s获得%d积分' % (
-							'运气爆棚！' if point >= 90 else '', point
-						)),
-					])
+					if isinstance(self.source, Group):
+						self.resp = MessageChain.create([
+							At(self.source.id),
+							Plain(' 签到成功，%s获得%d积分' % (
+								'运气爆棚！' if point >= 90 else '', point
+							)),
+						])
+					else:
+						self.resp = MessageChain.create([
+							Plain(' 签到成功，%s获得%d积分' % (
+								'运气爆棚！' if point >= 90 else '', point
+							)),
+						])
 			except Exception as e:
 				print(e)
 				self.unkown_error()
 		elif self.msg[0].startswith('积分'):
 			try:
-				user = User(self.source)
+				user = User(self.source.id)
 				point = user.get_points()
-				self.resp = MessageChain.create([
-					At(self.source),
-					Plain(' 你的积分为%d!' % int(point))
-				])
+				if isinstance(self.source, Group):
+					self.resp = MessageChain.create([
+						At(self.source.id),
+						Plain(' 你的积分为%d!' % int(point))
+					])
+				else:
+					self.resp = MessageChain.create([
+						Plain(' 你的积分为%d!' % int(point))
+					])
 			except Exception as e:
 				print(e)
 				self.unkown_error()
@@ -113,5 +132,5 @@ class Game(Plugin):
 
 
 if __name__ == '__main__':
-	a = Game('.游戏 积分', '123')
+	a = Game('.游戏 积分', Group.construct(id=123))
 	print(a.get_resp())

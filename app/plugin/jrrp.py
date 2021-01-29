@@ -2,7 +2,7 @@ import time
 import math
 import random
 from app.plugin.base import Plugin
-from graia.application import MessageChain
+from graia.application import MessageChain, Group, Friend
 from graia.application.message.elements.internal import Plain, At
 
 
@@ -24,7 +24,7 @@ class Jrrp(Plugin):
 		for i in range(0, 101):
 			for j in range(int(f(i, mul=60, sigma=40))):
 				rplist.append(i)
-		random.seed(str(self.source) + self.date)
+		random.seed(str(self.source.id) + self.date)
 		result = rplist[random.randint(0, len(rplist) - 1)]
 		return result
 
@@ -53,9 +53,9 @@ class Jrrp(Plugin):
 		return result
 
 	def process(self):
-		if self.source:
+		if isinstance(self.source, Group):
 			self.resp = MessageChain.create([
-				At(self.source),
+				At(self.source.id),
 				Plain(' ' + self._print_jrrp())
 			])
 		else:
@@ -65,5 +65,5 @@ class Jrrp(Plugin):
 
 
 if __name__ == '__main__':
-	a = Jrrp('123', '12123')
+	a = Jrrp('123', Friend.construct(id='123'))
 	print(a.get_resp())

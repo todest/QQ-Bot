@@ -4,5 +4,6 @@ __all__ = [
 	'hitokoto',
 	'mcinfo',
 	'readhub',
-	'wallpaper'
+	'wallpaper',
+	'game'
 ]

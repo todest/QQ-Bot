@@ -2,8 +2,8 @@ from app.plugin import *
 from app.core.settings import *
 from graia.application.friend import Friend
 from graia.application.group import Group, Member
+from graia.application import GraiaMiraiApplication
 from graia.application.message.chain import MessageChain
-
 from graia.application.message.elements.internal import Plain
 
 
@@ -48,9 +48,9 @@ class Controller:
 		for plugin in base.Plugin.__subclasses__():
 			obj = None
 			if isinstance(self.source, Friend):
-				obj = plugin(msg)
+				obj = plugin(msg, self.source)
 			elif isinstance(self.source, Group):
-				obj = plugin(msg, self.member.id)
+				obj = plugin(msg, self.member)
 			if send_help:  # 主菜单帮助获取
 				resp += obj.brief_help
 			elif msg.startswith(obj.entry):  # 指令执行

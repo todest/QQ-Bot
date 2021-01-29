@@ -12,7 +12,7 @@ bcc = Broadcast(loop=loop)
 bot = GraiaMiraiApplication(
 	broadcast=bcc,
 	connect_info=Session(
-		host=LOGIN_HOST + ':' + LOGIN_PORT,
+		host='http://' + LOGIN_HOST + ':' + LOGIN_PORT,
 		authKey=AUTH_KEY,
 		account=LOGIN_QQ,
 		websocket=True
