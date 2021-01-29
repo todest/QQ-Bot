@@ -33,10 +33,12 @@ class Controller:
 		elif isinstance(self.source, Group):
 			if self.source.id not in ACTIVE_GROUP:
 				return
-
-		# 判断是否为指令
-		elif not msg.startswith('.'):
+		elif not msg[0] in '.,;。，；/\\':  # 判断是否为指令
 			return
+
+		# 指令规范化
+		if not msg[0] == '.':
+			msg = '.' + msg[1:]
 
 		# 判断是否为主菜单帮助
 		if msg.startswith('.help'):
@@ -49,15 +51,12 @@ class Controller:
 				obj = plugin(msg)
 			elif isinstance(self.source, Group):
 				obj = plugin(msg, self.member.id)
-
-			# 主菜单帮助获取
-			if send_help:
+			if send_help:  # 主菜单帮助获取
 				resp += obj.brief_help
-
-			# 指令执行
-			elif msg.startswith(obj.entry):
+			elif msg.startswith(obj.entry):  # 指令执行
 				resp = obj.get_resp()
-				await self._do_send(resp)
+				if resp:
+					await self._do_send(resp)
 				break
 
 		# 主菜单帮助发送

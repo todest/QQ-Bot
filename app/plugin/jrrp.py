@@ -16,8 +16,7 @@ class Jrrp(Plugin):
 	full_help = '获取你今日的人品值，人品值为百分制哦！'
 
 	def __init__(self, msg, source=None):
-		super().__init__(msg)
-		self.source = source
+		super().__init__(msg, source)
 		self.date = time.strftime("%Y%m%d", time.localtime())
 
 	def _get_jrrp(self) -> int:

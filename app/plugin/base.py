@@ -1,3 +1,5 @@
+from typing import List
+
 from app.util.parse import *
 from graia.application import MessageChain
 from graia.application.message.elements.internal import Plain
@@ -6,8 +8,11 @@ from graia.application.message.elements.internal import Plain
 class Plugin:
 	"""
 	子类必须重写这三个属性
+
 	@:param entry: 程序入口点参数
+
 	@:param brief_help: 简短帮助，显示在主帮助菜单
+
 	@:param full_help: 完整帮助，显示在插件帮助菜单
 	"""
 	entry = '.plugin'
@@ -16,7 +21,7 @@ class Plugin:
 
 	def __init__(self, msg, source=None):
 		"""根据需求可重写此构造方法"""
-		self.msg = parse_args(msg)
+		self.msg: List[str] = parse_args(msg)
 		self.source = source
 		self.resp = None
 
@@ -63,3 +68,5 @@ class Plugin:
 			self.process()
 		if self.resp:
 			return self.resp
+		else:
+			return None
