@@ -44,5 +44,5 @@ class MysqlDao:
 
 if __name__ == '__main__':
 	with MysqlDao() as db:
-		res = db.query('select * from user')
+		res = db.query('SELECT * FROM user')
 		print(res)
