@@ -69,15 +69,29 @@ class User:
 
 
 class Game(Plugin):
-	entry = '.游戏'
-	brief_help = entry + '\t游戏区\r\n'
+	entry = '.积分'
+	brief_help = entry + '\t积分专区\r\n'
 	full_help = \
-		'.游戏 签到\t每天可以签到随机获取积分，积分值从0-100不等。\r\n' \
-		'.游戏 积分\t可以查询当前积分总量。\r\n'
+		'.积分\t可以查询当前积分总量。\r\n' \
+		'.积分 签到\t每天可以签到随机获取积分，积分值从0-100不等。\r\n'
 
 	def process(self):
 		if not self.msg:
-			self.args_error()
+			try:
+				user = User(self.source.id)
+				point = user.get_points()
+				if isinstance(self.source, Member):
+					self.resp = MessageChain.create([
+						At(self.source.id),
+						Plain(' 你的积分为%d!' % int(point))
+					])
+				else:
+					self.resp = MessageChain.create([
+						Plain(' 你的积分为%d!' % int(point))
+					])
+			except Exception as e:
+				print(e)
+				self.unkown_error()
 			return
 		if self.msg[0].startswith('签到'):
 			try:
@@ -108,22 +122,6 @@ class Game(Plugin):
 								'运气爆棚！' if point >= 90 else '', point
 							)),
 						])
-			except Exception as e:
-				print(e)
-				self.unkown_error()
-		elif self.msg[0].startswith('积分'):
-			try:
-				user = User(self.source.id)
-				point = user.get_points()
-				if isinstance(self.source, Member):
-					self.resp = MessageChain.create([
-						At(self.source.id),
-						Plain(' 你的积分为%d!' % int(point))
-					])
-				else:
-					self.resp = MessageChain.create([
-						Plain(' 你的积分为%d!' % int(point))
-					])
 			except Exception as e:
 				print(e)
 				self.unkown_error()

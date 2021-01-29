@@ -31,7 +31,6 @@ class MysqlDao:
 		return query_result
 
 	def update(self, sql):
-		effect_rows = 0
 		try:
 			effect_rows = self.cur.execute(sql)
 			self.db.commit()
