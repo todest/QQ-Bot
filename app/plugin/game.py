@@ -3,7 +3,7 @@ import random
 
 from app.util.dao import MysqlDao
 from app.plugin.base import Plugin
-from graia.application import MessageChain, Group
+from graia.application import MessageChain, Member
 
 from graia.application.message.elements.internal import Plain, At
 
@@ -84,7 +84,7 @@ class Game(Plugin):
 				point = random.randint(0, 101)
 				user = User(self.source.id, point)
 				if user.get_sign_in_status():
-					if isinstance(self.source, Group):
+					if isinstance(self.source, Member):
 						self.resp = MessageChain.create([
 							At(self.source.id),
 							Plain(' 你今天已经签到过了！'),
@@ -95,7 +95,7 @@ class Game(Plugin):
 						])
 				else:
 					user.sign_in()
-					if isinstance(self.source, Group):
+					if isinstance(self.source, Member):
 						self.resp = MessageChain.create([
 							At(self.source.id),
 							Plain(' 签到成功，%s获得%d积分' % (
@@ -115,7 +115,7 @@ class Game(Plugin):
 			try:
 				user = User(self.source.id)
 				point = user.get_points()
-				if isinstance(self.source, Group):
+				if isinstance(self.source, Member):
 					self.resp = MessageChain.create([
 						At(self.source.id),
 						Plain(' 你的积分为%d!' % int(point))
@@ -132,5 +132,5 @@ class Game(Plugin):
 
 
 if __name__ == '__main__':
-	a = Game('.游戏 积分', Group.construct(id=123))
+	a = Game('.游戏 积分', Member.construct(id=123))
 	print(a.get_resp())
