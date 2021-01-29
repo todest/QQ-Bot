@@ -43,6 +43,25 @@ class User:
 				if not res:
 					raise Exception()
 
+	def set_point(self, point):
+		"""修改积分"""
+		if self.exist:
+			with MysqlDao() as db:
+				res = db.update(
+					"UPDATE user SET points=points+{} WHERE qq='{}'".format(
+						point, self.qq
+					))
+				if not res:
+					raise Exception()
+		else:
+			with MysqlDao() as db:
+				res = db.update(
+					"INSERT INTO user (qq, points) VALUES ('{}', {})".format(
+						self.qq, point
+					))
+				if not res:
+					raise Exception()
+
 	def get_sign_in_status(self):
 		"""查询签到状态"""
 		if self.exist:
@@ -73,7 +92,9 @@ class Game(Plugin):
 	brief_help = entry + '\t积分专区\r\n'
 	full_help = \
 		'.积分\t可以查询当前积分总量。\r\n' \
-		'.积分 签到\t每天可以签到随机获取积分，积分值从0-100不等。\r\n'
+		'.积分 签到\t每天可以签到随机获取积分。\r\n' \
+		'.积分 转给@XX[num]\t转给XX num积分。\r\n' \
+		'.积分 踢@XX\t消耗10积分踢XX，使其掉落随机数量积分！\r\n'
 
 	def process(self):
 		if not self.msg:
@@ -95,7 +116,7 @@ class Game(Plugin):
 			return
 		if self.msg[0].startswith('签到'):
 			try:
-				point = random.randint(0, 101)
+				point = random.randint(1, 101)
 				user = User(self.source.id, point)
 				if user.get_sign_in_status():
 					if isinstance(self.source, Member):
@@ -105,7 +126,7 @@ class Game(Plugin):
 						])
 					else:
 						self.resp = MessageChain.create([
-							Plain(' 你今天已经签到过了！'),
+							Plain(' 你今天已经签到过了！')
 						])
 				else:
 					user.sign_in()
@@ -125,6 +146,74 @@ class Game(Plugin):
 			except Exception as e:
 				print(e)
 				self.unkown_error()
+		elif self.msg[0].startswith('转给'):
+			try:
+				if len(self.msg) == 1:
+					self.args_error()
+					return
+				point = int(self.msg[1])
+				if point <= 0:
+					self.args_error()
+					return
+				user = User(self.source.id)
+				if int(user.get_points()) < point:
+					self.point_not_enough()
+					return
+				target = self.message.get(At)[0]
+				if not target:
+					self.args_error()
+					return
+				user.set_point(-point)
+				user = User(target.dict()['target'], point)
+				user.set_point(point)
+				self.resp = MessageChain.create([
+					At(self.source.id),
+					Plain(' 已转赠给'),
+					target,
+					Plain(' %d积分！' % point)
+				])
+			except ValueError as e:
+				print(e)
+				self.arg_type_error()
+			except Exception as e:
+				print(e)
+				self.unkown_error()
+		elif self.msg[0].startswith('踢'):
+			target = self.message.get(At)[0]
+			if not target:
+				self.args_error()
+				return
+			user1 = User(self.source.id)
+			if int(user1.get_points()) < 10:
+				self.point_not_enough()
+				return
+			user2 = User(target.dict()['target'])
+			rest = int(user2.get_points())
+			point = random.randint(0, int(0.8 * rest))
+			if rest <= 0:
+				self.resp = MessageChain.create([
+					At(self.source.id),
+					Plain(' 对方是个穷光蛋！请不要伤害他！')
+				])
+				return
+			user1.set_point(-10)
+			if rest <= point:
+				point = rest
+				self.resp = MessageChain.create([
+					At(self.source.id),
+					Plain(' 花费10积分踢了'),
+					target,
+					Plain('一脚，对方掉了%d积分，变成了穷光蛋！' % rest)
+				])
+			else:
+				self.resp = MessageChain.create([
+					At(self.source.id),
+					Plain(' 花费10积分踢了'),
+					target,
+					Plain('一脚，对方掉了%d积分，对你咬牙切齿！' % point)
+				])
+			if point:
+				user2.set_point(-point)
 		else:
 			self.args_error()
 

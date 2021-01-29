@@ -18,7 +18,8 @@ class Plugin:
 
 	def __init__(self, msg, source=None):
 		"""根据需求可重写此构造方法"""
-		self.msg: List[str] = parse_args(msg)
+		self.msg: List[str] = parse_args(msg.asDisplay())
+		self.message: MessageChain = msg
 		self.source = source
 		self.resp = None
 
@@ -52,6 +53,11 @@ class Plugin:
 		"""类型错误默认回复消息"""
 		self.resp = MessageChain.create([Plain(
 			'参数类型错误！'
+		)])
+
+	def point_not_enough(self):
+		self.resp = MessageChain.create([Plain(
+			'你的积分不足哦！'
 		)])
 
 	def process(self):

@@ -48,9 +48,9 @@ class Controller:
 		for plugin in base.Plugin.__subclasses__():
 			obj = None
 			if isinstance(self.source, Friend):
-				obj = plugin(msg, self.source)
+				obj = plugin(self.message, self.source)
 			elif isinstance(self.source, Group):
-				obj = plugin(msg, self.member)
+				obj = plugin(self.message, self.member)
 			if send_help:  # 主菜单帮助获取
 				resp += obj.brief_help
 			elif msg.startswith(obj.entry):  # 指令执行
