@@ -33,7 +33,7 @@ class Controller:
 		elif isinstance(self.source, Group):
 			if self.source.id not in ACTIVE_GROUP:
 				return
-		elif not msg[0] in '.,;。，；/\\':  # 判断是否为指令
+		elif msg[0] not in '.,;。，；/\\':  # 判断是否为指令
 			return
 
 		# 指令规范化
