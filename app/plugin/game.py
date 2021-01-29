@@ -81,7 +81,7 @@ class Game(Plugin):
 			return
 		if self.msg[0].startswith('签到'):
 			try:
-				point = random.randint(1, 101)
+				point = random.randint(0, 101)
 				user = User(self.source.id, point)
 				if user.get_sign_in_status():
 					if isinstance(self.source, Group):
