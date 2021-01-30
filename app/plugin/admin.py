@@ -8,7 +8,8 @@ from graia.application.message.elements.internal import Plain
 
 class Admin(Plugin):
 	entry = ['.sys', '.系统']
-	brief_help = \
+    brief_help = entry[0] + '\t系统设置\r\n'
+	full_help = \
 		'.管理/.sys\t仅限管理员使用！\r\n' \
 		'.管理/.sys au\t临时添加用户\r\n' \
 		'.管理/.sys du\t临时移除用户\r\n' \
