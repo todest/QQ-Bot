@@ -1,3 +1,4 @@
+import asyncio
 import requests
 from app.plugin.base import Plugin
 from graia.application import MessageChain
@@ -5,10 +6,10 @@ from graia.application.message.elements.internal import Plain
 
 
 class Hitokoto(Plugin):
-	entry = '.say'
-	brief_help = entry + '\t一言\r\n'
+	entry = ['.say', '一言']
+	brief_help = entry[0] + '\t一言\r\n'
 	full_help = \
-		".say [type] type列表如下:\r\n" \
+		".一言/.say [type] type列表如下:\r\n" \
 		"a\t动画\r\n" \
 		"b\t漫画\r\n" \
 		"c\t游戏\r\n" \
@@ -22,7 +23,7 @@ class Hitokoto(Plugin):
 		"k\t哲学\r\n" \
 		"l\t抖机灵"
 
-	def process(self):
+	async def process(self):
 		try:
 			self.resp = MessageChain.create([Plain(
 				self._get_hitokoto()
@@ -49,5 +50,6 @@ class Hitokoto(Plugin):
 
 
 if __name__ == '__main__':
-	a = Hitokoto('c')
-	print(a.get_resp())
+	a = Hitokoto(MessageChain.create([Plain('.say c')]))
+	asyncio.run(a.get_resp())
+	print(a.resp)

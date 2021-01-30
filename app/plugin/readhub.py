@@ -1,15 +1,15 @@
 import json
+import asyncio
 import requests
-
 from app.plugin.base import Plugin
 from graia.application import MessageChain
 from graia.application.message.elements.internal import Plain
 
 
 class ReadHub(Plugin):
-	entry = '.news'
-	brief_help = entry + '\t科技新闻\r\n'
-	full_help = '.news [num]\r\n获取num数量的科技新闻信息，默认数量为5。'
+	entry = ['.news', '.新闻']
+	brief_help = entry[0] + '\t科技新闻\r\n'
+	full_help = '.新闻/.news [num]\r\n获取num数量的科技新闻信息，默认数量为5。'
 
 	def _get_news(self) -> str:
 		if self.msg:
@@ -32,7 +32,7 @@ class ReadHub(Plugin):
 				news_digest += "\r\n\r\n" + news["title"]
 		return news_digest
 
-	def process(self):
+	async def process(self):
 		try:
 			self.resp = MessageChain.create([Plain(
 				self._get_news()
@@ -50,4 +50,5 @@ class ReadHub(Plugin):
 
 if __name__ == '__main__':
 	a = ReadHub('.news')
-	print(a.get_resp())
+	asyncio.run(a.get_resp())
+	print(a.resp)

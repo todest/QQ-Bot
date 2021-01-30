@@ -1,35 +1,47 @@
-from app.util.parse import *
-from graia.application import MessageChain
+from app.util.tools import *
 from graia.application.message.elements.internal import Plain
+from graia.application import MessageChain, GraiaMiraiApplication, Friend, Group, Member
 
 
 class Plugin:
-	"""子类必须重写这三个属性
-
-	@:param entry: 程序入口点参数
-
-	@:param brief_help: 简短帮助，显示在主帮助菜单
-
-	@:param full_help: 完整帮助，显示在插件帮助菜单
-	"""
-	entry = '.plugin'
-	brief_help = entry + 'this is a brief help.'
+	"""插件继承此父类，并重写下面三个参数"""
+	entry = ['.plugin']
+	brief_help = entry[0] + 'this is a brief help.'
 	full_help = 'this is a detail help.'
+	"""
+	:param entry: 程序入口点参数
+	:param brief_help: 简短帮助，显示在主帮助菜单
+	:param full_help: 完整帮助，显示在插件帮助菜单
+	"""
 
-	def __init__(self, msg, source=None):
+	def __init__(self, message, *args):
 		"""根据需求可重写此构造方法"""
-		self.msg: List[str] = parse_args(msg.asDisplay())
-		self.message: MessageChain = msg
-		self.source = source
+		self.msg: List[str] = parse_args(message.asDisplay())
+		self.message: MessageChain = message
+		for arg in args:
+			if isinstance(arg, Friend):
+				self.friend: Friend = arg  # 消息来源 好友
+			elif isinstance(arg, Group):
+				self.group: Group = arg  # 消息来源 群聊
+			elif isinstance(arg, Member):
+				self.member: Member = arg  # 群聊消息发送者
+			elif isinstance(arg, GraiaMiraiApplication):
+				self.app: GraiaMiraiApplication = arg  # 程序执行主体
 		self.resp = None
 
 	def _pre_check(self):
 		"""此方法检查是否为插件帮助指令"""
 		if self.msg:
-			if self.msg[0] == 'help':
+			if isstartswith(self.msg[0], ['help', '帮助']):
 				self.resp = MessageChain.create([Plain(
 					self.full_help
 				)])
+
+	def print_help(self):
+		"""回送插件详细帮助"""
+		self.resp = MessageChain.create([Plain(
+			self.full_help
+		)])
 
 	def unkown_error(self):
 		"""未知错误默认回复消息"""
@@ -60,15 +72,25 @@ class Plugin:
 			'你的积分不足哦！'
 		)])
 
-	def process(self):
+	def not_admin(self):
+		self.resp = MessageChain.create([Plain(
+			'你不是管理员哦，无权操作此命令！'
+		)])
+
+	def exec_success(self):
+		self.resp = MessageChain.create([Plain(
+			'指令执行成功！'
+		)])
+
+	async def process(self):
 		"""子类必须重写此方法，此方法用于修改要发送的信息内容"""
 		raise NotImplementedError
 
-	def get_resp(self):
+	async def get_resp(self):
 		"""程序默认调用的方法以获取要发送的信息"""
 		self._pre_check()
 		if not self.resp:
-			self.process()
+			await self.process()
 		if self.resp:
 			return self.resp
 		else:

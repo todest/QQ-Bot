@@ -30,9 +30,9 @@ class MysqlDao:
 			raise e
 		return query_result
 
-	def update(self, sql):
+	def update(self, sql, args=None):
 		try:
-			effect_rows = self.cur.execute(sql)
+			effect_rows = self.cur.execute(sql, arg=args)
 			self.db.commit()
 		except Exception as e:
 			self.db.rollback()
@@ -43,5 +43,5 @@ class MysqlDao:
 
 if __name__ == '__main__':
 	with MysqlDao() as db:
-		res = db.query('SELECT * FROM user')
+		res = db.query('SELECT FROM test where id=%s', [1])
 		print(res)

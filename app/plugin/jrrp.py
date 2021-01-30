@@ -1,8 +1,9 @@
 import time
 import math
 import random
+import asyncio
 from app.plugin.base import Plugin
-from graia.application import MessageChain, Friend, Member
+from graia.application import MessageChain, Friend
 from graia.application.message.elements.internal import Plain, At
 
 
@@ -11,12 +12,14 @@ def f(x, mul, sigma):
 
 
 class Jrrp(Plugin):
-	entry = '.jrrp'
-	brief_help = entry + '\t今日人品\r\n'
-	full_help = '获取你今日的人品值，人品值为百分制哦！'
+	entry = ['.jrrp', '人品', '今日人品']
+	brief_help = entry[0] + '\t今日人品\r\n'
+	full_help = \
+		'.人品/.今日人品/.jrrp\r\n' \
+		'获取你今日的人品值，人品值为百分制哦！'
 
-	def __init__(self, msg, source=None):
-		super().__init__(msg, source)
+	def __init__(self, message, *args):
+		super().__init__(message, *args)
 		self.date = time.strftime("%Y%m%d", time.localtime())
 
 	def _get_jrrp(self) -> int:
@@ -24,7 +27,7 @@ class Jrrp(Plugin):
 		for i in range(0, 101):
 			for j in range(int(f(i, mul=60, sigma=40))):
 				rplist.append(i)
-		random.seed(str(self.source.id) + self.date)
+		random.seed(str((getattr(self, 'friend', None) or getattr(self, 'member', None)).id) + self.date)
 		result = rplist[random.randint(0, len(rplist) - 1)]
 		return result
 
@@ -52,10 +55,10 @@ class Jrrp(Plugin):
 			result = "你今天的人品值是：%d，100! 100!! 100!!!" % result
 		return result
 
-	def process(self):
-		if isinstance(self.source, Member):
+	async def process(self):
+		if hasattr(self, 'group'):
 			self.resp = MessageChain.create([
-				At(self.source.id),
+				At(self.member.id),
 				Plain(' ' + self._print_jrrp())
 			])
 		else:
@@ -65,5 +68,6 @@ class Jrrp(Plugin):
 
 
 if __name__ == '__main__':
-	a = Jrrp('123', Friend.construct(id='123'))
-	print(a.get_resp())
+	a = Jrrp(MessageChain.create([Plain('.jrrp')]), Friend.construct(id='123'))
+	asyncio.run(a.get_resp())
+	print(a.resp)

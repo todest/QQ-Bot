@@ -2,11 +2,10 @@ import time
 import json
 import socket
 import struct
-
+import asyncio
 import jsonpath
 from app.plugin.base import Plugin
 from graia.application import MessageChain
-
 from graia.application.message.elements.internal import Plain
 
 
@@ -136,15 +135,15 @@ class StatusPing:
 
 
 class McStatus(Plugin):
-	entry = '.mc'
-	brief_help = entry + '\t获取MC服务器状态\r\n'
+	entry = ['.mc', '.mcinfo', '.info']
+	brief_help = entry[0] + '\t获取MC服务器状态\r\n'
 	full_help = \
-		'.mc [ip] [port] [timeout]\r\n' \
+		'.mc/.info/.mcinfo [ip] [port] [timeout]\r\n' \
 		'ip: MC服务器域名或IP\r\n' \
 		'port: MC服务器端口号\r\n' \
 		'timeout: 设置超时时间'
 
-	def process(self):
+	async def process(self):
 		try:
 			self.resp = MessageChain.create([Plain(
 				StatusPing(*self.msg).get_status(str_format=True))
@@ -164,4 +163,5 @@ class McStatus(Plugin):
 
 if __name__ == '__main__':
 	a = McStatus('.mc')
-	print(a.get_resp())
+	asyncio.run(a.get_resp())
+	print(a.resp)

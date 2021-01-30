@@ -5,5 +5,6 @@ __all__ = [
 	'mcinfo',
 	'readhub',
 	'wallpaper',
-	'game'
+	'game',
+	'admin'
 ]
