@@ -4,7 +4,7 @@ import random
 from app.util.dao import MysqlDao
 from app.plugin.base import Plugin
 from app.util.tools import isstartswith
-from graia.application import MessageChain, Member, Friend
+from graia.application import MessageChain, Friend
 from graia.application.message.elements.internal import Plain, At, Face
 
 

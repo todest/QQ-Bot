@@ -32,7 +32,7 @@ class MysqlDao:
 
 	def update(self, sql, args=None):
 		try:
-			effect_rows = self.cur.execute(sql, arg=args)
+			effect_rows = self.cur.execute(sql, args=args)
 			self.db.commit()
 		except Exception as e:
 			self.db.rollback()
