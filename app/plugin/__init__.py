@@ -6,5 +6,6 @@ __all__ = [
 	'readhub',
 	'wallpaper',
 	'game',
+	'cp',
 	'admin'
 ]
