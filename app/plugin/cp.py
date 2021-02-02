@@ -24,10 +24,7 @@ class Cp(Plugin):
 		cp = None
 		for inx, item in enumerate(members):
 			if item['id'] == self.member.id:
-				if inx & 1:
-					cp = inx - 1
-				else:
-					cp = inx + 1
+				cp = inx - 1 if inx & 1 else inx + 1
 				break
 		random.seed()
 		self.resp = MessageChain.create([
