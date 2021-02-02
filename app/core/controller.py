@@ -1,3 +1,5 @@
+import random
+
 from app.plugin import *
 from app.core.settings import *
 from app.util.tools import isstartswith
@@ -38,6 +40,10 @@ class Controller:
 			if self.group.id not in ACTIVE_GROUP:
 				return
 		if msg[0] not in '.,;。，；/\\':  # 判断是否为指令
+			if hasattr(self, 'group'):
+				probability = random.randint(0, 51)
+				if probability < 1:
+					await self.app.sendGroupMessage(self.group, self.message.asSendable())
 			return
 
 		# 指令规范化
