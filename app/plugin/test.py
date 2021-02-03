@@ -3,7 +3,7 @@ from app.plugin.base import Plugin
 
 class Test(Plugin):
     entry = ['.test']
-    brief_help = '\r\n[√]\t此为测试'
+    brief_help = '\r\n[√]\t测试：test'
     full_help = '仅限测试使用！'
     enable = True
     hidden = True
