@@ -27,9 +27,6 @@ def repeated(qid, bid, num):
             'SELECT content FROM msg WHERE group_id=%s AND member_id=%s ORDER BY id DESC LIMIT %s',
             [qid, bid, 1]
         )
-        print(res)
-        print('-' * 10)
-        print(bot)
         if bot:
             if bot[0][0] == res[0][0]:
                 return False
