@@ -46,6 +46,7 @@ class Controller:
                 probability = random.randint(0, 51)
                 if probability < 1:
                     await self.app.sendGroupMessage(self.group, self.message.asSendable())
+                    save(self.group.id, self.app.connect_info.account, msg)
                 else:
                     if repeated(self.group.id, self.app.connect_info.account, 2):
                         await self.app.sendGroupMessage(self.group, self.message.asSendable())
