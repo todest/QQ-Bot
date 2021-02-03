@@ -8,5 +8,6 @@ __all__ = [
     'game',
     'cp',
     'admin',
-    'tell'
+    'tell',
+    'test'
 ]
