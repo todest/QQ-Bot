@@ -1,11 +1,13 @@
-import random
 import asyncio
-from app.util.dao import MysqlDao
-from app.plugin.base import Plugin
-from app.resource.earn_quot import *
-from app.util.tools import isstartswith
+import random
+
 from graia.application import MessageChain, Friend
 from graia.application.message.elements.internal import Plain, At, Face
+
+from app.plugin.base import Plugin
+from app.resource.earn_quot import *
+from app.util.dao import MysqlDao
+from app.util.tools import isstartswith
 
 
 class BotUser:
@@ -195,8 +197,8 @@ class Game(Plugin):
     num = {
         # c: cost, p: percent, d: drops, m: max
         'bomb': {'c': 10, 'p': 0.8, 'd': 30, 'm': 1},
-        'kick': {'c': 10, 'p': 0.8, 'd': 30, 'm': 1},
-        'steal': {'c': 10, 'p': 0.8, 'd': 30, 'm': 1},
+        'kick': {'c': 30, 'p': 0.8, 'd': 60, 'm': 1},
+        'steal': {'c': 50, 'p': 0.8, 'd': 100, 'm': 1},
     }
 
     async def process(self):
