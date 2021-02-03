@@ -1,4 +1,4 @@
 __all__ = [
-	'earn_quot',
-	'love'
+    'earn_quot',
+    'love'
 ]

@@ -1,4 +1,4 @@
 __all__ = [
-	'controller',
-	'settings'
+    'controller',
+    'settings'
 ]
