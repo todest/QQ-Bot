@@ -49,7 +49,7 @@ class Controller:
                 else:
                     if repeated(self.group.id, self.app.connect_info.account, 2):
                         await self.app.sendGroupMessage(self.group, self.message.asSendable())
-                        save(self.group.id, self.app.connect_info.account, self.message.asSendable())
+                        save(self.group.id, self.app.connect_info.account, msg)
             return
 
         # 指令规范化
