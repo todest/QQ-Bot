@@ -11,4 +11,3 @@ class Test(Plugin):
     async def process(self):
         if not self.check_admin():
             return
-        await self.app.revokeMessage()
