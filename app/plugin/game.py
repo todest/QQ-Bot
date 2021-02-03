@@ -182,7 +182,7 @@ class BotUser:
 
 class Game(Plugin):
     entry = ['.gp', '.积分']
-    brief_help = entry[0] + '\t积分专区\r\n'
+    brief_help = '\r\n[√]\t积分：gp'
     full_help = \
         '.积分/.gp\t可以查询当前积分总量。\r\n' \
         '.积分/.gp 签到/signin\t每天可以签到随机获取积分。\r\n' \

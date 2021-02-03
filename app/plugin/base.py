@@ -1,3 +1,4 @@
+from app.util.permission import *
 from app.util.tools import *
 from graia.application.message.elements.internal import Plain
 from graia.application import MessageChain, GraiaMiraiApplication, Friend, Group, Member
@@ -8,6 +9,9 @@ class Plugin:
     entry = ['.plugin']
     brief_help = entry[0] + 'this is a brief help.'
     full_help = 'this is a detail help.'
+    enable = True
+    hidden = False
+
     """
     :param entry: 程序入口点参数
     :param brief_help: 简短帮助，显示在主帮助菜单
@@ -21,8 +25,12 @@ class Plugin:
         for arg in args:
             if isinstance(arg, Friend):
                 self.friend: Friend = arg  # 消息来源 好友
+                if not check_permit(arg.id, 'friend', self.entry[0][1:]):
+                    self.enable = False
             elif isinstance(arg, Group):
                 self.group: Group = arg  # 消息来源 群聊
+                if not check_permit(arg.id, 'group', self.entry[0][1:]):
+                    self.enable = False
             elif isinstance(arg, Member):
                 self.member: Member = arg  # 群聊消息发送者
             elif isinstance(arg, GraiaMiraiApplication):
@@ -81,6 +89,16 @@ class Plugin:
         self.resp = MessageChain.create([Plain(
             '指令执行成功！'
         )])
+
+    def check_admin(self):
+        """检查是否管理员"""
+        if hasattr(self, 'group'):
+            if self.member.id in ADMIN_USER:
+                return True
+        elif hasattr(self, 'friend'):
+            if self.friend.id in ADMIN_USER:
+                return True
+        return False
 
     async def process(self):
         """子类必须重写此方法，此方法用于修改要发送的信息内容"""

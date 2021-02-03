@@ -1,6 +1,7 @@
 import random
 
 from app.plugin import *
+from app.util.msg import *
 from app.core.settings import *
 from app.util.tools import isstartswith
 from graia.application.friend import Friend
@@ -30,7 +31,7 @@ class Controller:
         """处理消息"""
         msg = self.message.asDisplay()
         send_help = False  # 是否为主菜单帮助
-        resp = '.help\t显示帮助指令\r\n'
+        resp = '[√]\t帮助：help'
 
         # 判断是否在权限允许列表
         if hasattr(self, 'friend'):
@@ -39,11 +40,16 @@ class Controller:
         elif hasattr(self, 'group'):
             if self.group.id not in ACTIVE_GROUP:
                 return
-        if msg[0] not in '.,;。，；/\\':  # 判断是否为指令
+        if msg[0] not in '.,;!?。，；！？/\\':  # 判断是否为指令
             if hasattr(self, 'group'):
+                save(self.group.id, self.member.id, msg)
                 probability = random.randint(0, 51)
                 if probability < 1:
                     await self.app.sendGroupMessage(self.group, self.message.asSendable())
+                else:
+                    if repeated(self.group.id, self.app.connect_info.account, 2):
+                        await self.app.sendGroupMessage(self.group, self.message.asSendable())
+                        save(self.group.id, self.app.connect_info.account, self.message.asSendable())
             return
 
         # 指令规范化
@@ -61,12 +67,22 @@ class Controller:
                 obj = plugin(self.message, self.friend, self.app)
             elif hasattr(self, 'group'):
                 obj = plugin(self.message, self.group, self.member, self.app)
-            if send_help:  # 主菜单帮助获取
-                resp += obj.brief_help
+            if (hasattr(self, 'group') and self.member.id in ACTIVE_USER) or (
+                    hasattr(self, 'friend') and self.friend.id in ACTIVE_USER):
+                obj.hidden = False
+            if send_help and not obj.hidden:  # 主菜单帮助获取
+                if not obj.enable:
+                    resp += obj.brief_help.replace('√', '×')
+                else:
+                    resp += obj.brief_help
             elif isstartswith(msg, obj.entry):  # 指令执行
-                resp = await obj.get_resp()
-                if resp:
-                    await self._do_send(resp)
+                if obj.enable:
+                    resp = await obj.get_resp()
+                else:
+                    resp = MessageChain.create([Plain(
+                        '此功能未开启！'
+                    )])
+                await self._do_send(resp)
                 break
 
         # 主菜单帮助发送
@@ -75,6 +91,8 @@ class Controller:
 
     async def _do_send(self, resp):
         """发送消息"""
+        if not isinstance(resp, MessageChain):
+            return
         if hasattr(self, 'friend'):  # 发送好友消息
             await self.app.sendFriendMessage(self.friend, resp)
         elif hasattr(self, 'group'):  # 发送群聊消息

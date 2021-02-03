@@ -13,7 +13,7 @@ def f(x, mul, sigma):
 
 class Jrrp(Plugin):
     entry = ['.jrrp', '人品', '今日人品']
-    brief_help = entry[0] + '\t今日人品\r\n'
+    brief_help = '\r\n[√]\t今日人品：jrrp'
     full_help = \
         '.人品/.今日人品/.jrrp\r\n' \
         '获取你今日的人品值，人品值为百分制哦！'

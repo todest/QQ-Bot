@@ -136,7 +136,7 @@ class StatusPing:
 
 class McStatus(Plugin):
     entry = ['.mc', '.mcinfo', '.info']
-    brief_help = entry[0] + '\t获取MC服务器状态\r\n'
+    brief_help = '\r\n[√]\tMC状态：mc'
     full_help = \
         '.mc/.info/.mcinfo [ip] [port] [timeout]\r\n' \
         'ip: MC服务器域名或IP\r\n' \

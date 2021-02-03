@@ -8,23 +8,18 @@ from graia.application.message.elements.internal import Plain
 
 class Admin(Plugin):
     entry = ['.sys', '.系统']
-    brief_help = entry[0] + '\t系统设置\r\n'
+    brief_help = '\r\n[√]\t系统：sys'
     full_help = \
         '.管理/.sys\t仅限管理员使用！\r\n' \
         '.管理/.sys au [qq]\t临时添加用户\r\n' \
         '.管理/.sys du [qq]\t临时移除用户\r\n' \
         '.管理/.sys ag [qg]\t临时添加群组\r\n' \
-        '.管理/.sys dg\ [qg]t临时移除群组'
+        '.管理/.sys dg [qg]\t临时移除群组'
+    hidden = True
 
     async def process(self):
-        if hasattr(self, 'group'):
-            if self.member.id not in ADMIN_USER:
-                self.not_admin()
-        elif hasattr(self, 'friend'):
-            if self.friend.id not in ADMIN_USER:
-                self.not_admin()
-        else:
-            self.unkown_error()
+        if not self.check_admin():
+            self.not_admin()
         if not self.msg:
             self.print_help()
             return

@@ -9,7 +9,7 @@ from graia.application.message.elements.internal import At, Plain, Image
 
 class Cp(Plugin):
     entry = ['.cp']
-    brief_help = entry[0] + '\t群内每天随机组CP\r\n'
+    brief_help = '\r\n[√]\t组CP：cp'
     full_help = '每天在群内组CP'
 
     async def process(self):
