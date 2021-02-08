@@ -7,6 +7,7 @@ __all__ = [
     'wallpaper',
     'game',
     'cp',
+    'netease',
     'admin',
     'tell',
     'test'

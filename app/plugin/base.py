@@ -1,22 +1,22 @@
+from graia.application import MessageChain, GraiaMiraiApplication, Friend, Group, Member
+from graia.application.message.elements.internal import Plain
+
 from app.util.permission import *
 from app.util.tools import *
-from graia.application.message.elements.internal import Plain
-from graia.application import MessageChain, GraiaMiraiApplication, Friend, Group, Member
 
 
 class Plugin:
-    """插件继承此父类，并重写下面三个参数"""
+    """插件继承此父类，并重写下面三个参数
+
+    :param entry: 程序入口点参数
+    :param brief_help: 简短帮助，显示在主帮助菜单
+    :param full_help: 完整帮助，显示在插件帮助菜单
+    """
     entry = ['.plugin']
     brief_help = entry[0] + 'this is a brief help.'
     full_help = 'this is a detail help.'
     enable = True
     hidden = False
-
-    """
-    :param entry: 程序入口点参数
-    :param brief_help: 简短帮助，显示在主帮助菜单
-    :param full_help: 完整帮助，显示在插件帮助菜单
-    """
 
     def __init__(self, message, *args):
         """根据需求可重写此构造方法"""
