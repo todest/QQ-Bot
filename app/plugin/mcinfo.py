@@ -12,7 +12,7 @@ from graia.application.message.elements.internal import Plain
 class StatusPing:
     """ Get the ping status for the Minecraft server """
 
-    def __init__(self, host='pipakacha.com', port=25565, timeout=10):
+    def __init__(self, host='127.0.0.1', port=25565, timeout=10):
         """ Init the hostname and the port """
         self._host = host
         self._port = int(port)
@@ -162,6 +162,6 @@ class McStatus(Plugin):
 
 
 if __name__ == '__main__':
-    a = McStatus('.mc')
+    a = McStatus(MessageChain.create([Plain('.mc')]))
     asyncio.run(a.get_resp())
     print(a.resp)

@@ -1,11 +1,14 @@
 import asyncio
-from app.core.settings import *
-from graia.broadcast import Broadcast
-from app.core.controller import Controller
+
+from graia.application import GraiaMiraiApplication, Session
 from graia.application.friend import Friend
 from graia.application.group import Group, Member
 from graia.application.message.chain import MessageChain
-from graia.application import GraiaMiraiApplication, Session
+from graia.broadcast import Broadcast
+
+from app.core.controller import Controller
+from app.core.settings import *
+from app.extend.mc import mc_listener
 
 loop = asyncio.get_event_loop()
 bcc = Broadcast(loop=loop)
@@ -32,4 +35,5 @@ async def group_message_listener(message: MessageChain, group: Group, member: Me
     await event.process_event()
 
 
+loop.create_task(mc_listener(bot))
 bot.launch_blocking()
