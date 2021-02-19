@@ -30,4 +30,6 @@ def repeated(qid, bid, num):
         if bot:
             if bot[0][0] == res[0][0]:
                 return False
+            if bot[0][0].startswith('[表情]') or bot[0][0].startswith('[图片]'):
+                return False
         return True
