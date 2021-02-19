@@ -22,7 +22,6 @@ class McServer:
     def update(self, init=False):
         players = self.players.copy()
         description = self.description
-        # noinspection PyBroadException
         try:
             response = StatusPing(self.ip, self.port).get_status()
             status = True
@@ -35,7 +34,7 @@ class McServer:
                     players.update({names[index]})
             else:
                 players.clear()
-        except Exception:
+        except (EnvironmentError, Exception):
             status = False
             players.clear()
 
@@ -99,5 +98,5 @@ async def mc_listener(app):
                     await app.sendFriendMessage(target, resp_a)
                     if resp_b:
                         await app.sendFriendMessage(target, resp_b)
-        print('mc_listener is running...')
+        app.logger.info('mc_listener is running...')
         await asyncio.sleep(60)
