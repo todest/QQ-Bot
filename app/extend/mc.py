@@ -48,11 +48,11 @@ class McServer:
             if players != self.players:
                 for player in self.players - players:
                     resp_player.plus(MessageChain.create([
-                        Plain('%s退出了%s:%d(%s)MC服务器！' % (player, self.ip, self.port, self.description))
+                        Plain('%s退出了%s:%d（%s）MC服务器！\r\n' % (player, self.ip, self.port, self.description))
                     ]))
                 for player in players - self.players:
                     resp_player.plus(MessageChain.create([
-                        Plain('%s加入了%s:%d(%s)MC服务器！' % (player, self.ip, self.port, self.description))
+                        Plain('%s加入了%s:%d（%s）MC服务器！\r\n' % (player, self.ip, self.port, self.description))
                     ]))
                 self.players = players
             else:
@@ -62,11 +62,11 @@ class McServer:
             if status != self.status:
                 if status:
                     resp_server.plus(MessageChain.create([
-                        Plain('MC服务器%s:%d(%s)已开启！' % (self.ip, self.port, self.description))
+                        Plain('MC服务器%s:%d（%s）已开启！' % (self.ip, self.port, self.description))
                     ]))
                 else:
                     resp_server.plus(MessageChain.create([
-                        Plain('MC服务器%s:%d(%s)已关闭！' % (self.ip, self.port, self.description))
+                        Plain('MC服务器%s:%d（%s）已关闭！' % (self.ip, self.port, self.description))
                     ]))
                 self.status = status
             else:
@@ -84,17 +84,19 @@ class McServer:
 
 async def mc_listener(app):
     data = []
-    for ips in LISTEN_MC_SERVER:
-        data.append(McServer(*ips))
+    for ips, qq in LISTEN_MC_SERVER:
+        data.append([McServer(*ips), qq])
     while True:
-        for item in data:
+        for item, qq in data:
             resp_a, resp_b = item.update()
             if not resp_a:
                 continue
-            for target in MC_LISTEN_SEND:
-                target = await app.getGroup(target)
+            for target in qq:
+                target = await app.getFriend(target)
+                if not target:
+                    continue
                 with enter_context(app=app):
-                    await app.sendGroupMessage(target, resp_a)
+                    await app.sendFriendMessage(target, resp_a)
                     if resp_b:
-                        await app.sendGroupMessage(target, resp_b)
+                        await app.sendFriendMessage(target, resp_b)
         await asyncio.sleep(60)
