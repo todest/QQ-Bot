@@ -70,6 +70,7 @@ class McServer:
                 self.status = status
             else:
                 resp_server = None
+            self.description = description
 
             if resp_server:
                 if status:
