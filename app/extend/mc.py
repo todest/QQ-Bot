@@ -12,7 +12,7 @@ from app.plugin.mcinfo import StatusPing
 class McServer:
     status = False
     players = set()
-    description = None
+    description = ''
 
     def __init__(self, ip='127.0.0.1', port=25565):
         self.ip = ip
@@ -21,7 +21,7 @@ class McServer:
 
     def update(self, init=False):
         players = self.players.copy()
-        description = self.description.copy()
+        description = self.description
         # noinspection PyBroadException
         try:
             response = StatusPing(self.ip, self.port).get_status()
@@ -99,4 +99,5 @@ async def mc_listener(app):
                     await app.sendFriendMessage(target, resp_a)
                     if resp_b:
                         await app.sendFriendMessage(target, resp_b)
+        print('mc_listener is running...')
         await asyncio.sleep(60)
