@@ -21,7 +21,7 @@ class McServer:
 
     def update(self, init=False):
         players = self.players.copy()
-        description = self.description
+        description = self.description.copy()
         # noinspection PyBroadException
         try:
             response = StatusPing(self.ip, self.port).get_status()
