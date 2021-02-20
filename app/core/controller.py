@@ -1,15 +1,15 @@
 import random
 
-from app.plugin import *
-from app.util.msg import *
-from app.core.settings import *
-from app.util.tools import isstartswith
+from graia.application import GraiaMiraiApplication
 from graia.application.friend import Friend
 from graia.application.group import Group, Member
-from graia.application import GraiaMiraiApplication
 from graia.application.message.chain import MessageChain
-
 from graia.application.message.elements.internal import Plain
+
+from app.core.settings import *
+from app.plugin import *
+from app.util.msg import *
+from app.util.tools import isstartswith
 
 
 class Controller:
@@ -47,10 +47,12 @@ class Controller:
                 if probability < 1:
                     await self.app.sendGroupMessage(self.group, self.message.asSendable())
                     save(self.group.id, self.app.connect_info.account, msg)
+                    self.app.logger.info('Random Repeat: ' + msg)
                 else:
                     if repeated(self.group.id, self.app.connect_info.account, 2):
                         await self.app.sendGroupMessage(self.group, self.message.asSendable())
                         save(self.group.id, self.app.connect_info.account, msg)
+                        self.app.logger.info('Follow Repeat: ' + msg)
             return
 
         # 指令规范化
