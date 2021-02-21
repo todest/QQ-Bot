@@ -19,7 +19,7 @@ def repeated(qid, bid, num):
         )
         if len(res) != num:
             raise Exception()
-        if res[0][0].startswith('[表情]') or res[0][0].startswith('[图片]'):
+        if res[0][0].startswith('[图片]'):
             return False
         for i in range(len(res) - 1):
             if res[i] != res[i + 1]:
