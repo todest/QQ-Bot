@@ -43,29 +43,37 @@ class McServer:
             self.players = players
             self.description = description
         else:
-            resp_player = MessageChain.create([])
+            resp_player = MessageChain.create([
+                Plain(f'地址：{self.ip}:{self.port}\r\n'),
+                Plain(f'描述：{self.description}\r\n'),
+                Plain(f'信息：\r\n')
+            ])
             if players != self.players:
                 for player in self.players - players:
                     resp_player.plus(MessageChain.create([
-                        Plain('%s退出了%s:%d（%s）MC服务器！\r\n' % (player, self.ip, self.port, self.description))
+                        Plain(f'{player}退出了服务器！\r\n')
                     ]))
                 for player in players - self.players:
                     resp_player.plus(MessageChain.create([
-                        Plain('%s加入了%s:%d（%s）MC服务器！\r\n' % (player, self.ip, self.port, self.description))
+                        Plain(f'{player}加入了服务器！\r\n')
                     ]))
                 self.players = players
             else:
                 resp_player = None
 
-            resp_server = MessageChain.create([])
+            resp_server = MessageChain.create([
+                Plain(f'地址：{self.ip}:{self.port}\r\n'),
+                Plain(f'描述：{self.description}\r\n'),
+                Plain(f'信息：\r\n')
+            ])
             if status != self.status:
                 if status:
                     resp_server.plus(MessageChain.create([
-                        Plain('MC服务器%s:%d（%s）已开启！' % (self.ip, self.port, self.description))
+                        Plain('服务器已开启！')
                     ]))
                 else:
                     resp_server.plus(MessageChain.create([
-                        Plain('MC服务器%s:%d（%s）已关闭！' % (self.ip, self.port, self.description))
+                        Plain('服务器已关闭！')
                     ]))
                 self.status = status
             else:
