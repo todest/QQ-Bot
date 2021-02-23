@@ -43,16 +43,15 @@ class Controller:
         if msg[0] not in '.,;!?。，；！？/\\':  # 判断是否为指令
             if hasattr(self, 'group'):
                 save(self.group.id, self.member.id, msg)
-                probability = random.randint(0, 51)
-                if probability < 1:
+                probability = random.randint(0, 101)
+                if (probability < 1) and repeated(self.group.id, self.app.connect_info.account, 2):
                     await self.app.sendGroupMessage(self.group, self.message.asSendable())
                     save(self.group.id, self.app.connect_info.account, msg)
                     self.app.logger.info('Random Repeat: ' + msg)
-                else:
-                    if repeated(self.group.id, self.app.connect_info.account, 2):
-                        await self.app.sendGroupMessage(self.group, self.message.asSendable())
-                        save(self.group.id, self.app.connect_info.account, msg)
-                        self.app.logger.info('Follow Repeat: ' + msg)
+                if repeated(self.group.id, self.app.connect_info.account, 2):
+                    await self.app.sendGroupMessage(self.group, self.message.asSendable())
+                    save(self.group.id, self.app.connect_info.account, msg)
+                    self.app.logger.info('Follow Repeat: ' + msg)
             return
 
         # 指令规范化
