@@ -43,51 +43,35 @@ class McServer:
             self.players = players
             self.description = description
         else:
-            resp_player = MessageChain.create([
+            resp = MessageChain.create([
                 Plain(f'地址：{self.ip}:{self.port}\r\n'),
-                Plain(f'描述：{self.description}\r\n'),
+                Plain(f'描述：{description}\r\n'),
                 Plain(f'信息：\r\n')
             ])
-            if players != self.players:
-                for player in self.players - players:
-                    resp_player.plus(MessageChain.create([
-                        Plain(f'{player}退出了服务器！\r\n')
-                    ]))
-                for player in players - self.players:
-                    resp_player.plus(MessageChain.create([
-                        Plain(f'{player}加入了服务器！\r\n')
-                    ]))
-                self.players = players
-            else:
-                resp_player = None
-
-            resp_server = MessageChain.create([
-                Plain(f'地址：{self.ip}:{self.port}\r\n'),
-                Plain(f'描述：{self.description}\r\n'),
-                Plain(f'信息：\r\n')
-            ])
-            if status != self.status:
-                if status:
-                    resp_server.plus(MessageChain.create([
-                        Plain('服务器已开启！')
-                    ]))
-                else:
-                    resp_server.plus(MessageChain.create([
-                        Plain('服务器已关闭！')
-                    ]))
-                self.status = status
-            else:
-                resp_server = None
+            resp_content = MessageChain.create([])
+            if status and (status != self.status):
+                resp_content.plus(MessageChain.create([
+                    Plain('服务器已开启！')
+                ]))
+            for player in self.players - players:
+                resp_content.plus(MessageChain.create([
+                    Plain(f'{player}退出了服务器！\r\n')
+                ]))
+            for player in players - self.players:
+                resp_content.plus(MessageChain.create([
+                    Plain(f'{player}加入了服务器！\r\n')
+                ]))
+            if (not status) and (status != self.status):
+                resp_content.plus(MessageChain.create([
+                    Plain('服务器已关闭！')
+                ]))
+            self.status = status
+            self.players = players
             self.description = description
-
-            if resp_server:
-                if status:
-                    return resp_server, resp_player
-                else:
-                    return resp_player, resp_server
-            else:
-                return resp_player, None
-        return None, None
+            if resp_content.__root__:
+                resp.plus(resp_content)
+                return resp
+            return None
 
 
 async def mc_listener(app):
@@ -95,17 +79,15 @@ async def mc_listener(app):
     for ips, qq in LISTEN_MC_SERVER:
         data.append([McServer(*ips), qq])
     while True:
+        await asyncio.sleep(LISTEN_DELAY)
+        app.logger.info('mc_listener is running...')
         for item, qq in data:
-            resp_a, resp_b = item.update()
-            if not resp_a:
+            resp = item.update()
+            if not resp:
                 continue
             for target in qq:
                 target = await app.getFriend(target)
                 if not target:
                     continue
                 with enter_context(app=app):
-                    await app.sendFriendMessage(target, resp_a)
-                    if resp_b:
-                        await app.sendFriendMessage(target, resp_b)
-        app.logger.info('mc_listener is running...')
-        await asyncio.sleep(60)
+                    await app.sendFriendMessage(target, resp)
