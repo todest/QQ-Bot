@@ -9,13 +9,13 @@ from app.plugin.base import Plugin
 
 
 class RandBg(Plugin):
-    entry = ['.st', '.setu', '.色图']
+    entry = ['.setu', '.st', '.色图']
     brief_help = '\r\n[√]\t色图：setu'
     full_help = '生成随机色图'
 
     async def process(self):
         try:
-            if not os.system('..\\resource\\randbg'):
+            if not os.system(r'..\resource\randbg'):
                 if platform.system().lower() == 'linux':
                     os.system('optipng rgb.png')
                 self.resp = MessageChain.create([
