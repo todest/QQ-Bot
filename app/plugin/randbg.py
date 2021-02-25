@@ -5,6 +5,7 @@ import platform
 from graia.application import MessageChain, Image
 from graia.application.message.elements.internal import Plain
 
+from app.core.settings import EXEC_PATH
 from app.plugin.base import Plugin
 
 
@@ -15,7 +16,7 @@ class RandBg(Plugin):
 
     async def process(self):
         try:
-            if not os.system(os.sep.join(['..', 'resource', 'randbg'])):
+            if not os.system(os.sep.join([EXEC_PATH, 'randbg'])):
                 if platform.system().lower() == 'linux':
                     os.system('optipng rgb.png')
                 self.resp = MessageChain.create([
