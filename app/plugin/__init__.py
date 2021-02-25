@@ -8,6 +8,7 @@ __all__ = [
     'game',
     'cp',
     'netease',
+    'randbg',
     'admin',
     'tell',
     'test'
