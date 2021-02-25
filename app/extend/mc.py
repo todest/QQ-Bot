@@ -51,7 +51,7 @@ class McServer:
             resp_content = MessageChain.create([])
             if status and (status != self.status):
                 resp_content.plus(MessageChain.create([
-                    Plain('服务器已开启！')
+                    Plain('服务器已开启！\r\n')
                 ]))
             for player in self.players - players:
                 resp_content.plus(MessageChain.create([
@@ -63,7 +63,7 @@ class McServer:
                 ]))
             if (not status) and (status != self.status):
                 resp_content.plus(MessageChain.create([
-                    Plain('服务器已关闭！')
+                    Plain('服务器已关闭！\r\n')
                 ]))
             self.status = status
             self.players = players
