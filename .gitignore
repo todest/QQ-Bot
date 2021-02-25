@@ -3,3 +3,5 @@ app/core/settings.py
 
 # pycache
 **/__pycache__/
+/app/resource/randbg.exe
+/app/plugin/rgb.png
