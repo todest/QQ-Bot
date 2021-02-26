@@ -14,7 +14,6 @@ int Image[ROWS][COLS];
 int Depth[ROWS][COLS];
 int Max_Depth = 0;
 void Generate_Map() {
-	srand(time(NULL));
 	int r = 0, c = 0;
 	vector<pair<int, int>> history;
 	history.push_back(make_pair(r, c));
@@ -144,8 +143,14 @@ void Print_Image() {
 	svpng(fp, COLS, ROWS, rgb, 0);
 	fclose(fp);
 }
-int main()
+int main(int argc, char* argv[])
 {
+	if (argc > 1) {
+		srand(atoi(argv[1]));
+	}
+	else {
+		srand(time(NULL));
+	}
 	Generate_Map();
 	DFS(rand() % (ROWS / 2) + ROWS / 4, rand() % (COLS / 2) + COLS / 4, 0);
 	Print_Image();

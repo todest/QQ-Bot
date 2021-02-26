@@ -12,11 +12,15 @@ from app.plugin.base import Plugin
 class RandBg(Plugin):
     entry = ['.setu', '.st', '.色图']
     brief_help = '\r\n[√]\t色图：setu'
-    full_help = '生成随机色图'
+    full_help = '.setu [seed] seed为正整数，默认为随机数\r\n' \
+                '生成随机色图'
 
     async def process(self):
         try:
-            if not os.system(os.sep.join([EXEC_PATH, 'randbg'])):
+            shell = os.sep.join([EXEC_PATH, 'randbg'])
+            if self.msg:
+                shell += ' ' + self.msg[0]
+            if not os.system(shell):
                 if platform.system().lower() == 'linux':
                     os.system('optipng rgb.png')
                 self.resp = MessageChain.create([
@@ -28,6 +32,6 @@ class RandBg(Plugin):
 
 
 if __name__ == '__main__':
-    a = RandBg(MessageChain.create([Plain('.setu')]))
+    a = RandBg(MessageChain.create([Plain('.setu 123')]))
     asyncio.run(a.get_resp())
     print(a.resp)
