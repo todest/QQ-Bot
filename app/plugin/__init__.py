@@ -10,6 +10,7 @@ __all__ = [
     'netease',
     'randbg',
     'admin',
+    'power',
     'tell',
     'test'
 ]
