@@ -8,7 +8,7 @@ from graia.application.message.elements.internal import Plain
 
 
 class Admin(Plugin):
-    entry = ['.power', '.电源']
+    entry = ['.power', '.电源', '.p']
     brief_help = '\r\n[√]\t电源：p'
     full_help = \
         '.管理\t.p\t仅限管理员使用！\r\n' \
@@ -32,11 +32,11 @@ class Admin(Plugin):
                 elif hasattr(self, 'friend'):
                     shell += f' -e {self.friend.id}'
                 if isstartswith(self.msg[0], 'k'):
-                    os.system(shell + ' -k')
+                    os.system(shell + ' -k > run.log')
                 elif isstartswith(self.msg[0], 'u'):
-                    os.system(shell + ' -u')
+                    os.system(shell + ' -u > run.log')
                 elif isstartswith(self.msg[0], 'r'):
-                    os.system(shell)
+                    os.system(shell + ' > run.log')
             elif isstartswith(self.msg[0], 'run'):
                 msg = self.message.asDisplay().strip().split('\r\n').pop(0)
                 self.resp = MessageChain.create([])
