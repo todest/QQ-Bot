@@ -42,12 +42,12 @@ async def power(app, argv):
             executor = await app.getFriend(arg)
     if shutdown:
         if group:
-            await app.sendGroupMessage(group, [
+            await app.sendGroupMessage(group, MessageChain.create([
                 At(executor),
                 Plain(' 进程未正常结束！')
-            ])
+            ]))
         else:
-            await app.sendFriendMessage(executor, MessageChain([
+            await app.sendFriendMessage(executor, MessageChain.create([
                 Plain('进程未正常结束！')
             ]))
     if upgrade:
@@ -57,7 +57,7 @@ async def power(app, argv):
                 Plain(' 升级失败！')
             ])
         else:
-            await app.sendFriendMessage(executor, MessageChain([
+            await app.sendFriendMessage(executor, MessageChain.create([
                 Plain('升级失败！')
             ]))
     else:
@@ -67,7 +67,7 @@ async def power(app, argv):
                 Plain(' 升级成功！')
             ])
         else:
-            await app.sendFriendMessage(executor, MessageChain([
+            await app.sendFriendMessage(executor, MessageChain.create([
                 Plain('升级成功！')
             ]))
     if reboot:
@@ -77,6 +77,6 @@ async def power(app, argv):
                 Plain(' 重启成功！')
             ])
         else:
-            await app.sendFriendMessage(executor, MessageChain([
+            await app.sendFriendMessage(executor, MessageChain.create([
                 Plain('重启成功！')
             ]))
