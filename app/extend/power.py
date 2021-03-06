@@ -12,7 +12,7 @@ async def power(app, argv):
     command_from_group = False
     command_executor = await app.getFriend(ADMIN_USER[0])
     try:
-        opts, args = getopt.getopt(argv[1:], "hi:o:", ["ifile=", "ofile="])
+        opts, args = getopt.getopt(argv[1:], "ukg:e:", ["u", "k", "g=", "e="])
     except getopt.GetoptError:
         await app.sendFriendMessage(command_executor, MessageChain.create([Plain("脚本参数错误")]))
         return
