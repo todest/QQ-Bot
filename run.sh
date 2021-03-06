@@ -1,10 +1,13 @@
 #!/bin/bash
 cd $(cd "$(dirname "$0")"; pwd)
-while getopts ":e:u:k:g" opt
+while getopts ":r:e:u:k:g" opt
 do
     case $opt in
     e)
         executor=$OPTARG
+    ;;
+    r)
+        boot=true
     ;;
     u)
         upgrade=true
@@ -29,10 +32,16 @@ if $shutdown; then
     exit
 fi
 
+if $boot; then
+    args='$args --reboot'
+fi
+
 if $upgrade; then
     git pull
     if [ $? -ne 0 ]; then
-        args='$args --upgrade'
+        args='$args --upgrade=false'
+    else
+        args='$args --upgrade=true'
     fi
 fi
 

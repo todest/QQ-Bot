@@ -7,69 +7,76 @@ from app.core.settings import *
 
 
 async def power(app, argv):
-    upgrade_failure = False
-    shutdown_failure = False
-    command_from_group = False
-    reboot_success = False
-    command_executor = await app.getFriend(ADMIN_USER[0])
+    upgrade = False
+    shutdown = False
+    group = False
+    reboot = False
+    executor = await app.getFriend(ADMIN_USER[0])
     try:
-        opts, args = getopt.getopt(argv[1:], "ru:k:g:e:", ["r", "u=", "k=", "g=", "e="])
+        opts, args = getopt.getopt(argv[1:], '-r-k-u:-g:-e:', ['reboot', 'kill', 'upgrade=', 'group=', 'executor='])
     except getopt.GetoptError:
-        await app.sendFriendMessage(command_executor, MessageChain.create([Plain("脚本参数错误")]))
+        await app.sendFriendMessage(executor, MessageChain.create([Plain("脚本参数错误")]))
         return
     for opt, arg in opts:
         if opt == '-h':
-            await app.sendFriendMessage(command_executor, MessageChain.create([
-                Plain("这是帮助菜单！")
+            await app.sendFriendMessage(executor, MessageChain.create([
+                Plain('\t-r\t--reboot\t重启成功\r\n'),
+                Plain('\t-k\t--kill\t关闭失败\r\n'),
+                Plain('\t-u\t--upgrade\t升级状态\r\n'),
+                Plain('\t\t例如：-u true, --group=true\r\n'),
+                Plain('\t-g\t--group\t来自群组\r\n'),
+                Plain('\t\t例如：-g 123, --group=123\r\n'),
+                Plain('\t-e\t--executor\t执行者\r\n'),
+                Plain('\t\t例如：-e 123, --e=123\r\n'),
             ]))
             return
-        elif opt in ('-u', '--upgrade'):
-            upgrade_failure = arg
-        elif opt in ('-k', '--kill'):
-            shutdown_failure = arg
         elif opt in ('-r', '--reboot'):
-            reboot_success = True
+            reboot = True
+        elif opt in ('-k', '--kill'):
+            shutdown = True
+        elif opt in ('-u', '--upgrade'):
+            upgrade = True
         elif opt in ('-g', '--group'):
-            command_from_group = await app.getGroup(command_from_group)
+            group = await app.getGroup(group)
         elif opt in ('-e', '--executor'):
-            command_executor = await app.getFriend(arg)
-    if shutdown_failure:
-        if command_from_group:
-            await app.sendGroupMessage(command_from_group, [
-                At(command_executor),
+            executor = await app.getFriend(arg)
+    if shutdown:
+        if group:
+            await app.sendGroupMessage(group, [
+                At(executor),
                 Plain(' 进程未正常结束！')
             ])
         else:
-            await app.sendFriendMessage(command_executor, MessageChain([
+            await app.sendFriendMessage(executor, MessageChain([
                 Plain('进程未正常结束！')
             ]))
-    if upgrade_failure:
-        if command_from_group:
-            await app.sendGroupMessage(command_from_group, [
-                At(command_executor),
+    if upgrade:
+        if group:
+            await app.sendGroupMessage(group, [
+                At(executor),
                 Plain(' 升级失败！')
             ])
         else:
-            await app.sendFriendMessage(command_executor, MessageChain([
+            await app.sendFriendMessage(executor, MessageChain([
                 Plain('升级失败！')
             ]))
     else:
-        if command_from_group:
-            await app.sendGroupMessage(command_from_group, [
-                At(command_executor),
+        if group:
+            await app.sendGroupMessage(group, [
+                At(executor),
                 Plain(' 升级成功！')
             ])
         else:
-            await app.sendFriendMessage(command_executor, MessageChain([
+            await app.sendFriendMessage(executor, MessageChain([
                 Plain('升级成功！')
             ]))
-    if reboot_success:
-        if command_from_group:
-            await app.sendGroupMessage(command_from_group, [
-                At(command_executor),
+    if reboot:
+        if group:
+            await app.sendGroupMessage(group, [
+                At(executor),
                 Plain(' 重启成功！')
             ])
         else:
-            await app.sendFriendMessage(command_executor, MessageChain([
+            await app.sendFriendMessage(executor, MessageChain([
                 Plain('重启成功！')
             ]))
