@@ -37,9 +37,9 @@ async def power(app, argv):
         elif opt in ('-u', '--upgrade'):
             upgrade = True
         elif opt in ('-g', '--group'):
-            group = await app.getGroup(group)
+            group = await app.getGroup(int(group))
         elif opt in ('-e', '--executor'):
-            executor = await app.getFriend(arg)
+            executor = await app.getFriend(int(arg))
     if shutdown:
         if group:
             await app.sendGroupMessage(group, MessageChain.create([
