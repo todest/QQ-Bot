@@ -10,9 +10,10 @@ async def power(app, argv):
     upgrade_failure = False
     shutdown_failure = False
     command_from_group = False
+    reboot_success = False
     command_executor = await app.getFriend(ADMIN_USER[0])
     try:
-        opts, args = getopt.getopt(argv[1:], "ukg:e:", ["u", "k", "g=", "e="])
+        opts, args = getopt.getopt(argv[1:], "ru:k:g:e:", ["r", "u=", "k=", "g=", "e="])
     except getopt.GetoptError:
         await app.sendFriendMessage(command_executor, MessageChain.create([Plain("脚本参数错误")]))
         return
@@ -23,9 +24,11 @@ async def power(app, argv):
             ]))
             return
         elif opt in ('-u', '--upgrade'):
-            upgrade_failure = True
+            upgrade_failure = arg
         elif opt in ('-k', '--kill'):
-            shutdown_failure = True
+            shutdown_failure = arg
+        elif opt in ('-r', '--reboot'):
+            reboot_success = True
         elif opt in ('-g', '--group'):
             command_from_group = await app.getGroup(command_from_group)
         elif opt in ('-e', '--executor'):
@@ -50,6 +53,23 @@ async def power(app, argv):
             await app.sendFriendMessage(command_executor, MessageChain([
                 Plain('升级失败！')
             ]))
-
-
-
+    else:
+        if command_from_group:
+            await app.sendGroupMessage(command_from_group, [
+                At(command_executor),
+                Plain(' 升级成功！')
+            ])
+        else:
+            await app.sendFriendMessage(command_executor, MessageChain([
+                Plain('升级成功！')
+            ]))
+    if reboot_success:
+        if command_from_group:
+            await app.sendGroupMessage(command_from_group, [
+                At(command_executor),
+                Plain(' 重启成功！')
+            ])
+        else:
+            await app.sendFriendMessage(command_executor, MessageChain([
+                Plain('重启成功！')
+            ]))
