@@ -9,7 +9,7 @@ class MysqlDao:
                 host=LOGIN_HOST,
                 user=MYSQL_USER,
                 password=MYSQL_PWD,
-                database='qqbot'
+                database=MYSQL_DATABASE
             )
             self.cur = self.db.cursor()
             return self

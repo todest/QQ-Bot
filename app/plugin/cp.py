@@ -30,7 +30,7 @@ class Cp(Plugin):
         self.resp = MessageChain.create([
             At(self.member.id),
             Plain(' 你今日配对的CP是：'),
-            Image.fromNetworkAddress('https://q1.qlogo.cn/g?b=qq&nk=' + str(members[cp]['id']) + '&s=640'),
+            Image.fromNetworkAddress('https://q1.qlogo.cn/g?b=qq&nk=' + str(members[cp]['id']) + '&s=1'),
             Plain('昵称：%s\r\n\r\n' % members[cp]['name']),
             Plain(random.choice(cp_say))
         ])

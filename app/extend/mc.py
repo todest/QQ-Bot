@@ -75,6 +75,8 @@ class McServer:
 
 
 async def mc_listener(app):
+    if LISTEN_DELAY == -1:
+        return
     data = []
     for ips, qq in LISTEN_MC_SERVER:
         data.append([McServer(*ips), qq])
