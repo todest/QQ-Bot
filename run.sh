@@ -4,25 +4,25 @@ while getopts ":e:u:k:g" opt
 do
     case $opt in
     e)
-        executor = $OPTARG
+        executor=$OPTARG
     ;;
     u)
-        upgrade = true
+        upgrade=true
     ;;
     k)
-        shutdown = true
+        shutdown=true
     ;;
     g)
-        group = $OPTARG
+        group=$OPTARG
     ;;
     esac
 done
 
-args = $executor
+args='--e=$executor'
 
 killall python3 -u todest
 if [ $? -ne 0 ]; then
-    args = '$args --kill'
+    args='$args --kill'
 fi
 
 if $shutdown; then
@@ -32,13 +32,11 @@ fi
 if $upgrade; then
     git pull
     if [ $? -ne 0 ]; then
-        args = '$args --upgrade'
+        args='$args --upgrade'
     fi
 fi
 
-
-
 if $group; then
-    args = '$args --group $group'
+    args='$args --group=$group'
 
 nohup python3 main.py $args &
