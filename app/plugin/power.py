@@ -1,5 +1,6 @@
 import os
 import threading
+from time import sleep
 
 from app.core.settings import *
 from app.plugin.base import Plugin
@@ -32,10 +33,21 @@ class Admin(Plugin):
                 if isstartswith(self.msg[0], 'k'):
                     os.system(shell + ' -k')
                 elif isstartswith(self.msg[0], 'u'):
-                    def run_upgrade():
-                        os.system(shell + ' -u')
-                    t1 = threading.Thread(target=run_upgrade)
+                    def run_upgrade(running):
+                        if running.isSet():
+                            os.system(shell + ' -u')
+
+                    event = threading.Event()
+                    t1 = threading.Thread(target=run_upgrade, args=(event,))
                     t1.start()
+
+                    def run_timeout(running):
+                        running.set()
+                        sleep(5)
+                        running.clear()
+
+                    t2 = threading.Thread(target=run_timeout, args=(event,))
+                    t2.start()
                 elif isstartswith(self.msg[0], 'r'):
                     os.system(shell + ' -r')
             else:
