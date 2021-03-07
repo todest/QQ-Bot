@@ -27,15 +27,15 @@ class Admin(Plugin):
             if isstartswith(self.msg[0], ['k', 'u', 'r']):
                 shell = HOME_PATH + f'run.sh'
                 if hasattr(self, 'group'):
-                    shell += f' -g {self.group.id} -e {self.member.id}'
+                    shell += f' -g {self.group.id} -t {self.member.id}'
                 elif hasattr(self, 'friend'):
-                    shell += f' -e {self.friend.id}'
+                    shell += f' -t {self.friend.id}'
                 if isstartswith(self.msg[0], 'k'):
-                    os.system(shell + ' -k > run.log')
+                    os.system(shell + ' -k')
                 elif isstartswith(self.msg[0], 'u'):
-                    os.system(shell + ' -u > run.log')
+                    os.system(shell + ' -u')
                 elif isstartswith(self.msg[0], 'r'):
-                    os.system(shell + ' > run.log')
+                    os.system(shell)
             else:
                 self.args_error()
                 return

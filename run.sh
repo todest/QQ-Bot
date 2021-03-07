@@ -1,9 +1,9 @@
 #!/bin/bash
 cd $(cd "$(dirname "$0")"; pwd)
-while getopts "rku:g:e:" opt
+while getopts "rku:g:t:" opt
 do
     case $opt in
-        e) bot_target=$OPTARG ;;
+        t) bot_target=$OPTARG ;;
         r) bot_reboot=true ;;
         u) bot_upgrade=true ;;
         k) bot_shutdown=true ;;
