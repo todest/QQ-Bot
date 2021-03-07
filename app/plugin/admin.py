@@ -11,11 +11,11 @@ class Admin(Plugin):
     entry = ['.sys', '.系统']
     brief_help = '\r\n[√]\t系统：sys'
     full_help = \
-        '.管理\t.sys\t仅限管理员使用！\r\n' \
-        '.管理\t.sys au [qq]\t临时添加用户\r\n' \
-        '.管理\t.sys du [qq]\t临时移除用户\r\n' \
-        '.管理\t.sys ag [qg]\t临时添加群组\r\n' \
-        '.管理\t.sys dg [qg]\t临时移除群组'
+        '.管理/.sys\t仅限管理员使用！\r\n' \
+        '.管理/.sys au [qq]\t临时添加用户\r\n' \
+        '.管理/.sys du [qq]\t临时移除用户\r\n' \
+        '.管理/.sys ag [qg]\t临时添加群组\r\n' \
+        '.管理/.sys dg [qg]\t临时移除群组'
     hidden = True
 
     async def process(self):

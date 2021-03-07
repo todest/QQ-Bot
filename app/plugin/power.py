@@ -11,11 +11,10 @@ class Admin(Plugin):
     entry = ['.power', '.电源', '.p']
     brief_help = '\r\n[√]\t电源：p'
     full_help = \
-        '.管理\t.p\t仅限管理员使用！\r\n' \
-        '.管理\t.p k\t关闭机器人\r\n' \
-        '.管理\t.p r\t重启机器人\r\n' \
-        '.管理\t.p u\t升级机器人\r\n' \
-        '.管理\t.p run\t执行python代码'
+        '.电源/.p\t仅限管理员使用！\r\n' \
+        '.电源/.p k\t关闭机器人\r\n' \
+        '.电源/.p r\t重启机器人\r\n' \
+        '.电源/.p u\t升级机器人\r\n'
     hidden = True
 
     async def process(self):
@@ -37,15 +36,6 @@ class Admin(Plugin):
                     os.system(shell + ' -u > run.log')
                 elif isstartswith(self.msg[0], 'r'):
                     os.system(shell + ' > run.log')
-            elif isstartswith(self.msg[0], 'run'):
-                msg = self.message.asDisplay().strip().split('\r\n').pop(0)
-                self.resp = MessageChain.create([])
-                for item in msg:
-                    ret = eval(item)
-                    if ret:
-                        self.resp.plus(MessageChain.create([
-                            Plain(str(ret))
-                        ]))
             else:
                 self.args_error()
                 return
