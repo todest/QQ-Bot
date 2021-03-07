@@ -44,7 +44,7 @@ class Admin(Plugin):
 
                     def run_timeout(running):
                         running.set()
-                        sleep(5)
+                        sleep(10)
                         running.clear()
 
                     t2 = threading.Thread(target=run_timeout, args=(event,))
