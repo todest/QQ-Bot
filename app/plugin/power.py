@@ -35,7 +35,7 @@ class Admin(Plugin):
                 elif isstartswith(self.msg[0], 'u'):
                     os.system(shell + ' -u')
                 elif isstartswith(self.msg[0], 'r'):
-                    os.system(shell)
+                    os.system(shell + ' -r')
             else:
                 self.args_error()
                 return
