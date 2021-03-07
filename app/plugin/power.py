@@ -34,6 +34,7 @@ class Admin(Plugin):
                     os.system(shell + ' -k')
                 elif isstartswith(self.msg[0], 'u'):
                     def run_upgrade(running):
+                        running.wait()
                         if running.isSet():
                             os.system(shell + ' -u')
 
