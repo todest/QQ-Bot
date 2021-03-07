@@ -40,4 +40,4 @@ if [ $bot_group ]; then
     args="$args --group=$bot_group"
 fi
 
-nohup python3 main.py $args &
+nohup python3 main.py $args > nohup.out 2>&1 &
