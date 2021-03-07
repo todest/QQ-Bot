@@ -1,6 +1,6 @@
 #!/bin/bash
 cd $(cd "$(dirname "$0")"; pwd)
-while getopts "rku:g:t:" opt
+while getopts "rkut:g:" opt
 do
     case $opt in
         t) bot_target=$OPTARG ;;
@@ -13,20 +13,7 @@ done
 
 args="--target=$bot_target"
 
-killall python3 -u todest
-
-if [ $? -ne 0 ]; then
-    args="$args --kill"
-fi
-
-if [ $bot_shutdown ]; then
-    exit
-fi
-
-if [ $bot_reboot ]; then
-    args="$args --reboot"
-fi
-
+# 进程升级
 if [ $bot_upgrade ]; then
     git pull
     if [ $? -ne 0 ]; then
@@ -36,8 +23,26 @@ if [ $bot_upgrade ]; then
     fi
 fi
 
+killall python3 -u todest
+
+# 进程退出失败
+if [ $? -ne 0 ]; then
+    args="$args --kill"
+fi
+
+# 来自群组
 if [ $bot_group ]; then
     args="$args --group=$bot_group"
+fi
+
+# 进程退出
+if [ $bot_shutdown ]; then
+    exit
+fi
+
+# 进程重启
+if [ $bot_reboot ]; then
+    args="$args --reboot"
 fi
 
 nohup python3 main.py $args > nohup.out 2>&1 &
