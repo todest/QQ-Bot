@@ -11,7 +11,7 @@ do
     esac
 done
 
-args="--e=$bot_target"
+args="--target=$bot_target"
 
 killall python3 -u todest
 
