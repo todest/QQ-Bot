@@ -1,10 +1,9 @@
 import os
+import threading
 
 from app.core.settings import *
 from app.plugin.base import Plugin
 from app.util.tools import isstartswith
-from graia.application import MessageChain
-from graia.application.message.elements.internal import Plain
 
 
 class Admin(Plugin):
@@ -33,7 +32,10 @@ class Admin(Plugin):
                 if isstartswith(self.msg[0], 'k'):
                     os.system(shell + ' -k')
                 elif isstartswith(self.msg[0], 'u'):
-                    os.system(shell + ' -u')
+                    def run_upgrade():
+                        os.system(shell + ' -u')
+                    t1 = threading.Thread(target=run_upgrade)
+                    t1.start()
                 elif isstartswith(self.msg[0], 'r'):
                     os.system(shell + ' -r')
             else:
