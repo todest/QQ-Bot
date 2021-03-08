@@ -23,5 +23,40 @@ def isstartswith(prefix: str, args) -> bool:
     return False
 
 
+def line_break(line, char_counts, tab_stop=4):
+    ret = ''
+    width = 0
+    for index, c in enumerate(line):
+        if len(c.encode('utf8')) == 3:
+            if (char_counts == width + 1) and ('\u4e00' <= c <= '\u9fa5'):
+                width = 2
+                ret += '\n' + c
+            elif c in '，。？！’“》】）；' and ret.endswith('\n'):
+                ret = ret[:-1] + c + '\n'
+            else:
+                width += 2
+                ret += c
+        else:
+            if c == '\t':
+                space_c = tab_stop - width % tab_stop
+                ret += ' ' * space_c
+                width += space_c
+            elif c == '\n':
+                width = 0
+                ret += c
+            elif c in ',.?!\'")>]};' and ret.endswith('\n'):
+                ret = ret[:-1] + c + '\n'
+            else:
+                width += 1
+                ret += c
+        if width >= char_counts:
+            ret += '\n'
+            width = 0
+    ret.replace('\n\n', '\n')
+    if ret.endswith('\n'):
+        return ret
+    return ret + '\n'
+
+
 if __name__ == '__main__':
     print(isstartswith('.help', ['.帮助', '.help']))
