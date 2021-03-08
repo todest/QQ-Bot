@@ -1,7 +1,8 @@
 import os
 import subprocess
-import threading
-from time import sleep
+
+from graia.application import MessageChain
+from graia.application.message.elements.internal import At, Plain
 
 from app.core.settings import *
 from app.plugin.base import Plugin
@@ -39,6 +40,15 @@ class Admin(Plugin):
                         p.wait(10)
                     except subprocess.TimeoutExpired:
                         p.kill()
+                        if hasattr(self, 'group'):
+                            self.resp = MessageChain.create([
+                                At(self.member.id),
+                                Plain(" 升级超时！")
+                            ])
+                        else:
+                            self.resp = MessageChain.create([
+                                Plain("升级超时！")
+                            ])
                 elif isstartswith(self.msg[0], 'r'):
                     os.system(shell + ' -r')
             else:
