@@ -21,7 +21,7 @@ def _get_news() -> str:
     resp_json = json.loads(req.text)
     news_list = resp_json["data"]
     for news in news_list:
-        news_digest += news["title"] + "\n"
+        news_digest += news["title"].replace('\n', '') + "\n"
     return news_digest
 
 
@@ -54,6 +54,7 @@ class ReadHub(Plugin):
             dr.text((padding, padding * 2), text=news, font=font, fill='BLACK', spacing=4)
             imbytes = BytesIO()
             im.save(imbytes, format='png')
+            # im.show()
             self.resp = MessageChain.create([
                 Img.fromUnsafeBytes(imbytes.getvalue())
             ])
@@ -65,4 +66,3 @@ class ReadHub(Plugin):
 if __name__ == '__main__':
     a = ReadHub(MessageChain.create([Plain('.news')]))
     asyncio.run(a.get_resp())
-    print(a.resp)
