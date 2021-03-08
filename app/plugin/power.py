@@ -1,4 +1,5 @@
 import os
+import subprocess
 import threading
 from time import sleep
 
@@ -33,22 +34,11 @@ class Admin(Plugin):
                 if isstartswith(self.msg[0], 'k'):
                     os.system(shell + ' -k')
                 elif isstartswith(self.msg[0], 'u'):
-                    def run_upgrade(running):
-                        running.wait()
-                        if running.isSet():
-                            os.system(shell + ' -u')
-
-                    event = threading.Event()
-                    t1 = threading.Thread(target=run_upgrade, args=(event,))
-                    t1.start()
-
-                    def run_timeout(running):
-                        running.set()
-                        sleep(10)
-                        running.clear()
-
-                    t2 = threading.Thread(target=run_timeout, args=(event,))
-                    t2.start()
+                    p = subprocess.Popen([shell, '-u'])
+                    try:
+                        p.wait(10)
+                    except subprocess.TimeoutExpired:
+                        p.kill()
                 elif isstartswith(self.msg[0], 'r'):
                     os.system(shell + ' -r')
             else:
