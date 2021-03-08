@@ -16,7 +16,7 @@ class Admin(Plugin):
         '.电源/.p\t仅限管理员使用！\r\n' \
         '.电源/.p k\t关闭机器人\r\n' \
         '.电源/.p r\t重启机器人\r\n' \
-        '.电源/.p u\t升级机器人\r\n'
+        '.电源/.p u [timeout]\t升级机器人(默认超时时间为10秒)\r\n'
     hidden = True
 
     async def process(self):
@@ -35,9 +35,12 @@ class Admin(Plugin):
                 if isstartswith(self.msg[0], 'k'):
                     os.system(shell + ' -k')
                 elif isstartswith(self.msg[0], 'u'):
+                    timeout = 10
+                    if len(self.msg) == 2 and self.msg[1].isdigit():
+                        timeout = int(self.msg[1])
                     p = subprocess.Popen(shell + ' -u', shell=True)
                     try:
-                        p.wait(10)
+                        p.wait(timeout)
                     except subprocess.TimeoutExpired:
                         p.kill()
                         if hasattr(self, 'group'):

@@ -1,5 +1,6 @@
 import asyncio
 import json
+from io import BytesIO
 
 import requests
 from PIL import Image, ImageDraw, ImageFont
@@ -49,9 +50,10 @@ class ReadHub(Plugin):
 
             dr.text((padding, padding), text=title, font=h1, fill='BLACK', spacing=4)
             dr.text((padding, padding * 2), text=news, font=font, fill='BLACK', spacing=4)
-            im.save('news.png', format='png')
+            imbytes = BytesIO()
+            im.save(imbytes, format='png')
             self.resp = MessageChain.create([
-                Img.fromLocalFile('news.png')
+                Img.fromUnsafeBytes(imbytes.getvalue())
             ])
         except Exception as e:
             print(e)
