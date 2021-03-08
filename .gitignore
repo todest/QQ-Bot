@@ -3,12 +3,12 @@ app/core/settings.py
 
 # pycache
 **/__pycache__/
+/.idea
+/venv
+/app/Test/
+/app/exec/randbg
 
 *.log
 *.out
 *.exe
 *.png
-
-/app/exec/randbg
-
-/app/Test/
