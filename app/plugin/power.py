@@ -34,7 +34,7 @@ class Admin(Plugin):
                 if isstartswith(self.msg[0], 'k'):
                     os.system(shell + ' -k')
                 elif isstartswith(self.msg[0], 'u'):
-                    p = subprocess.Popen([shell, '-u'])
+                    p = subprocess.Popen([shell, '-u'], shell=True)
                     try:
                         p.wait(10)
                     except subprocess.TimeoutExpired:
