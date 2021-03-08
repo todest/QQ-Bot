@@ -1,5 +1,6 @@
 import asyncio
 import json
+import os
 from io import BytesIO
 
 import requests
@@ -8,7 +9,7 @@ from graia.application import MessageChain
 from graia.application.message.elements.internal import Plain, Image as Img
 
 from app.plugin.base import Plugin
-from app.util.tools import line_break
+from app.util.tools import line_break, get_root_path
 
 
 def _get_news() -> str:
@@ -44,9 +45,10 @@ class ReadHub(Plugin):
             im = Image.new("L", (char_counts * font_size // 2 + padding * 2,
                                  font_size * news.count('\n') + padding * 3), "WHITE")
             dr = ImageDraw.Draw(im)
+            font_path = os.sep.join([get_root_path(), 'resource', 'fonts', ''])
 
-            h1 = ImageFont.truetype(font='../resource/fonts/msyhbd.ttc', size=int(font_size * 1.2))
-            font = ImageFont.truetype(font='../resource/fonts/simsun.ttc', size=font_size)
+            h1 = ImageFont.truetype(font=font_path + 'msyhbd.ttc', size=int(font_size * 1.2))
+            font = ImageFont.truetype(font=font_path + 'simsun.ttc', size=font_size)
 
             dr.text((padding, padding), text=title, font=h1, fill='BLACK', spacing=4)
             dr.text((padding, padding * 2), text=news, font=font, fill='BLACK', spacing=4)

@@ -1,3 +1,4 @@
+import os
 from typing import List
 
 
@@ -58,5 +59,9 @@ def line_break(line, char_counts, tab_stop=4):
     return ret + '\n'
 
 
+def get_root_path():
+    return os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
 if __name__ == '__main__':
-    print(isstartswith('.help', ['.帮助', '.help']))
+    print(get_root_path())

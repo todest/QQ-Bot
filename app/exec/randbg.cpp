@@ -130,7 +130,7 @@ void HSVtoRGB(float* r, float* g, float* b, int h, int s, int v)
 void Print_Image() {
 	unsigned char rgb[ROWS * COLS * 3], * p = rgb;
 	float r, g, b;
-	FILE* fp = fopen("rgb.png", "wb");
+	FILE* fp = fopen("../tmp/rgb.png", "wb");
 	for (int i = 0; i < ROWS; i++) {
 		for (int j = 0; j < COLS; j++) {
 			int Color = Depth[i][j] * 360 / Max_Depth;
