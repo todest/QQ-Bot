@@ -6,9 +6,9 @@ app/core/settings.py
 
 *.log
 *.out
+*.exe
+*.png
 
 /app/exec/randbg
-/app/exec/randbg.exe
-/app/plugin/rgb.png
 
 /app/Test/

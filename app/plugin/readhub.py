@@ -50,10 +50,9 @@ class ReadHub(Plugin):
 
             dr.text((padding, padding), text=title, font=h1, fill='BLACK', spacing=4)
             dr.text((padding, padding * 2), text=news, font=font, fill='BLACK', spacing=4)
-            im_bytes = BytesIO()
-            im.save(im_bytes, format='png')
+            im.save('news.png', format='png')
             self.resp = MessageChain.create([
-                Img.fromUnsafeBytes(im_bytes.getvalue())
+                Img.fromLocalFile('news.png')
             ])
         except Exception as e:
             print(e)
