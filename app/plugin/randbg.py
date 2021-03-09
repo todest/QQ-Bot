@@ -22,7 +22,7 @@ class RandBg(Plugin):
                 if self.msg:
                     shell += ' ' + self.msg[0]
                 os.system('ulimit -s 102400')
-                os.system(shell)
+                os.system(f'cd {get_root_path()}/exec && {shell}')
                 os.system(f'optipng {get_root_path()}/tmp/rgb.png')
             else:
                 shell = os.sep.join([get_root_path(), 'exec', 'randbg.exe'])
