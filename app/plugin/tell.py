@@ -3,6 +3,8 @@ from graia.application import MessageChain
 
 from graia.application.message.elements.internal import Plain, At
 
+from app.util.decorator import permission_required
+
 
 class Tell(Plugin):
     entry = ['.tell']
@@ -11,9 +13,8 @@ class Tell(Plugin):
                 '.tell [群号] [内容]'
     hidden = True
 
+    @permission_required(level='ADMIN')
     async def process(self):
-        if not self.check_admin():
-            self.not_admin()
         if not self.msg or len(self.msg) < 2:
             return
         assert self.msg[0].isdigit()

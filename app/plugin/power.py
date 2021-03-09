@@ -6,6 +6,7 @@ from graia.application.message.elements.internal import At, Plain
 
 from app.core.settings import *
 from app.plugin.base import Plugin
+from app.util.decorator import permission_required
 from app.util.tools import isstartswith
 
 
@@ -19,9 +20,8 @@ class Admin(Plugin):
         '.电源/.p u [timeout]\t升级机器人(默认超时时间为10秒)\r\n'
     hidden = True
 
+    @permission_required(level='ADMIN')
     async def process(self):
-        if not self.check_admin():
-            self.not_admin()
         if not self.msg:
             self.print_help()
             return

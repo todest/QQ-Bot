@@ -1,4 +1,5 @@
 from app.plugin.base import Plugin
+from app.util.decorator import permission_required
 
 
 class Test(Plugin):
@@ -8,6 +9,8 @@ class Test(Plugin):
     enable = True
     hidden = True
 
+    @permission_required(level='ADMIN')
     async def process(self):
-        if not self.check_admin():
+        if not self.msg:
+            self.print_help()
             return

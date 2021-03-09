@@ -2,6 +2,7 @@ import asyncio
 
 from app.core.settings import *
 from app.plugin.base import Plugin
+from app.util.decorator import permission_required
 from app.util.tools import isstartswith
 from graia.application import MessageChain
 from graia.application.message.elements.internal import Plain
@@ -18,9 +19,8 @@ class Admin(Plugin):
         '.管理/.sys dg [qg]\t临时移除群组'
     hidden = True
 
+    @permission_required(level='ADMIN')
     async def process(self):
-        if not self.check_admin():
-            self.not_admin()
         if not self.msg:
             self.print_help()
             return
