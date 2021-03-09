@@ -6,7 +6,7 @@ from graia.application import MessageChain, Image
 from graia.application.message.elements.internal import Plain
 
 from app.plugin.base import Plugin
-from app.util.tools import get_root_path
+from app.util.tools import app_path
 
 
 class RandBg(Plugin):
@@ -18,19 +18,19 @@ class RandBg(Plugin):
     async def process(self):
         try:
             if platform.system().lower() == 'linux':
-                shell = os.sep.join([get_root_path(), 'exec'])
+                shell = os.sep.join([app_path(), 'exec'])
                 if self.msg:
                     shell += ' ' + self.msg[0]
                 os.system('ulimit -s 102400')
                 os.system(f'cd {shell} && ./randbg')
-                os.system(f'optipng {get_root_path()}/tmp/rgb.png')
+                os.system(f'optipng {app_path()}/tmp/rgb.png')
             else:
-                shell = os.sep.join([get_root_path(), 'exec', 'randbg.exe'])
+                shell = os.sep.join([app_path(), 'exec', 'randbg.exe'])
                 if self.msg:
                     shell += ' ' + self.msg[0]
-                os.system(f'cd {get_root_path()}\\exec && {shell}')
+                os.system(f'cd {app_path()}\\exec && {shell}')
             self.resp = MessageChain.create([
-                Image.fromLocalFile(os.sep.join([get_root_path(), 'tmp', 'rgb.png']))
+                Image.fromLocalFile(os.sep.join([app_path(), 'tmp', 'rgb.png']))
             ])
         except Exception as e:
             print(e)

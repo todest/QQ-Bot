@@ -59,9 +59,9 @@ def line_break(line, char_counts, tab_stop=4):
     return ret + '\n'
 
 
-def get_root_path():
+def app_path():
     return os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 if __name__ == '__main__':
-    print(get_root_path())
+    print(app_path())
