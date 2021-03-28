@@ -23,7 +23,7 @@ if [ $bot_upgrade ]; then
     fi
 fi
 
-killall python3 -u todest
+killall python3 -u ubuntu
 
 # 进程退出失败
 if [ $? -ne 0 ]; then
