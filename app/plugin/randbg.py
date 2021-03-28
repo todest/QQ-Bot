@@ -17,12 +17,13 @@ class RandBg(Plugin):
 
     async def process(self):
         try:
+            if not os.path.exists(os.sep.join([app_path(), 'tmp'])):
+                os.makedirs(os.sep.join([app_path(), 'tmp']))
             if platform.system().lower() == 'linux':
                 shell = os.sep.join([app_path(), 'exec'])
                 if self.msg:
                     shell += ' ' + self.msg[0]
-                os.system('ulimit -s 102400')
-                os.system(f'cd {shell} && ./randbg')
+                os.system(f'ulimit -s 102400 && cd {shell} && ./randbg')
                 os.system(f'optipng {app_path()}/tmp/rgb.png')
             else:
                 shell = os.sep.join([app_path(), 'exec', 'randbg.exe'])
