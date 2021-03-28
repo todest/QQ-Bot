@@ -31,9 +31,7 @@ class Admin(Plugin):
                     shell = [f'-g {self.group.id}', f'-t {self.member.id}']
                 elif hasattr(self, 'friend'):
                     shell = f'-t {self.friend.id}'
-                if isstartswith(self.msg[0], 'k'):
-                    sys.exit()
-                elif isstartswith(self.msg[0], 'u'):
+                if isstartswith(self.msg[0], 'u'):
                     timeout = 10
                     if len(self.msg) == 2 and self.msg[1].isdigit():
                         timeout = int(self.msg[1])
@@ -52,7 +50,7 @@ class Admin(Plugin):
                             ])
                 elif isstartswith(self.msg[0], 'r'):
                     restart('-r', *shell)
-                    sys.exit()
+                sys.exit()
             else:
                 self.args_error()
                 return

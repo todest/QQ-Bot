@@ -8,7 +8,7 @@ app/core/settings.py
 /app/Test/
 /app/exec/randbg
 /app/resource/fonts/*
-/tmp/*
+/app/tmp/*
 
 *.log
 *.out
