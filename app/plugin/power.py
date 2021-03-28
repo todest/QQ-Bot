@@ -1,11 +1,12 @@
 import subprocess
+import sys
 
 from graia.application import MessageChain
 from graia.application.message.elements.internal import At, Plain
 
 from app.plugin.base import Plugin
 from app.util.decorator import permission_required
-from app.util.tools import isstartswith, app_path
+from app.util.tools import isstartswith, app_path, restart
 
 
 class Admin(Plugin):
@@ -25,18 +26,20 @@ class Admin(Plugin):
             return
         try:
             if isstartswith(self.msg[0], ['k', 'u', 'r']):
+                shell = ''
                 if hasattr(self, 'group'):
-                    subprocess.call(f'../run.sh -g {self.group.id} -t {self.member.id}', cwd=app_path(), shell=True)
+                    shell = [f'-g {self.group.id}', f'-t {self.member.id}']
                 elif hasattr(self, 'friend'):
-                    subprocess.call(f'../run.sh -t {self.friend.id}', cwd=app_path(), shell=True)
+                    shell = f'-t {self.friend.id}'
                 if isstartswith(self.msg[0], 'k'):
-                    subprocess.call(f'../run.sh -k', cwd=app_path(), shell=True)
+                    sys.exit()
                 elif isstartswith(self.msg[0], 'u'):
                     timeout = 10
                     if len(self.msg) == 2 and self.msg[1].isdigit():
                         timeout = int(self.msg[1])
                     try:
-                        subprocess.call(f'../run.sh -u', timeout=timeout, cwd=app_path(), shell=True)
+                        subprocess.call(f'git pull', timeout=timeout, cwd=app_path())
+                        restart('-u', *shell)
                     except subprocess.TimeoutExpired:
                         if hasattr(self, 'group'):
                             self.resp = MessageChain.create([
@@ -48,7 +51,8 @@ class Admin(Plugin):
                                 Plain("升级超时！")
                             ])
                 elif isstartswith(self.msg[0], 'r'):
-                    subprocess.call(f'./run.sh -r', cwd=app_path(), shell=True)
+                    restart('-r', *shell)
+                    sys.exit()
             else:
                 self.args_error()
                 return

@@ -1,4 +1,5 @@
 import os
+import sys
 from typing import List
 
 
@@ -61,6 +62,11 @@ def line_break(line, char_counts, tab_stop=4):
 
 def app_path():
     return os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
+def restart(*args):
+    python = sys.executable
+    os.execl(python, python, *[sys.argv[0], *args])
 
 
 if __name__ == '__main__':
