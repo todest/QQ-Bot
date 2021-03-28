@@ -37,10 +37,11 @@ class Admin(Plugin):
                         timeout = int(self.msg[1])
                     try:
                         ret = subprocess.call('git pull', timeout=timeout, shell=True)
+                        self.app.logger.info(f'返回值{ret}')
                         if ret == 0:
-                            restart('-u true', *shell)
+                            restart('-u', 'true', *shell)
                         else:
-                            restart('-u false', *shell)
+                            restart('-u', 'false', *shell)
                     except subprocess.TimeoutExpired:
                         if hasattr(self, 'group'):
                             self.resp = MessageChain.create([
