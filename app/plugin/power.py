@@ -37,7 +37,6 @@ class Admin(Plugin):
                         timeout = int(self.msg[1])
                     try:
                         ret = subprocess.call('git pull', timeout=timeout, shell=True)
-                        self.app.logger.info(f'返回值{ret}')
                         if ret == 0:
                             restart('-u', 'true', *shell)
                         else:
