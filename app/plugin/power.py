@@ -38,7 +38,7 @@ class Admin(Plugin):
                     if len(self.msg) == 2 and self.msg[1].isdigit():
                         timeout = int(self.msg[1])
                     try:
-                        subprocess.call(f'git pull', timeout=timeout, cwd=app_path())
+                        subprocess.call(f'git pull', timeout=timeout, shell=True)
                         restart('-u', *shell)
                     except subprocess.TimeoutExpired:
                         if hasattr(self, 'group'):
