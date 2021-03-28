@@ -12,7 +12,7 @@ from graia.application.message.elements.internal import Plain
 class StatusPing:
     """ Get the ping status for the Minecraft server """
 
-    def __init__(self, host='127.0.0.1', port=25565, timeout=10):
+    def __init__(self, host='mc.dusays.com', port=25756, timeout=10):
         """ Init the hostname and the port """
         self._host = host
         self._port = int(port)
