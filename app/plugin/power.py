@@ -28,7 +28,7 @@ class Admin(Plugin):
                 if hasattr(self, 'group'):
                     subprocess.call(f'./run.sh -g {self.group.id} -t {self.member.id}', cwd=app_path(), shell=True)
                 elif hasattr(self, 'friend'):
-                    subprocess.call(f'./run.sh -t {self.member.id}', cwd=app_path(), shell=True)
+                    subprocess.call(f'./run.sh -t {self.friend.id}', cwd=app_path(), shell=True)
                 if isstartswith(self.msg[0], 'k'):
                     subprocess.call(f'./run.sh -k', cwd=app_path(), shell=True)
                 elif isstartswith(self.msg[0], 'u'):
