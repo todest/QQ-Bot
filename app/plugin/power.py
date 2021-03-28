@@ -26,17 +26,17 @@ class Admin(Plugin):
         try:
             if isstartswith(self.msg[0], ['k', 'u', 'r']):
                 if hasattr(self, 'group'):
-                    subprocess.call(f'./run.sh -g {self.group.id} -t {self.member.id}', cwd=app_path(), shell=True)
+                    subprocess.call(f'../run.sh -g {self.group.id} -t {self.member.id}', cwd=app_path(), shell=True)
                 elif hasattr(self, 'friend'):
-                    subprocess.call(f'./run.sh -t {self.friend.id}', cwd=app_path(), shell=True)
+                    subprocess.call(f'../run.sh -t {self.friend.id}', cwd=app_path(), shell=True)
                 if isstartswith(self.msg[0], 'k'):
-                    subprocess.call(f'./run.sh -k', cwd=app_path(), shell=True)
+                    subprocess.call(f'../run.sh -k', cwd=app_path(), shell=True)
                 elif isstartswith(self.msg[0], 'u'):
                     timeout = 10
                     if len(self.msg) == 2 and self.msg[1].isdigit():
                         timeout = int(self.msg[1])
                     try:
-                        subprocess.call(f'./run.sh -u', timeout=timeout, cwd=app_path(), shell=True)
+                        subprocess.call(f'../run.sh -u', timeout=timeout, cwd=app_path(), shell=True)
                     except subprocess.TimeoutExpired:
                         if hasattr(self, 'group'):
                             self.resp = MessageChain.create([
