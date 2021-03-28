@@ -6,7 +6,7 @@ from graia.application.message.elements.internal import At, Plain
 
 from app.plugin.base import Plugin
 from app.util.decorator import permission_required
-from app.util.tools import isstartswith, app_path, restart
+from app.util.tools import isstartswith, restart
 
 
 class Admin(Plugin):
