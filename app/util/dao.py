@@ -1,5 +1,5 @@
 import pymysql
-from app.core.settings import *
+from app.core.config import *
 
 
 class MysqlDao:

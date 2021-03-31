@@ -75,13 +75,15 @@ class McServer:
 
 
 async def mc_listener(app):
-    if LISTEN_DELAY == -1:
+    if not LISTEN_MC_SERVER:
         return
     data = []
-    for ips, qq in LISTEN_MC_SERVER:
+    time = -1
+    for ips, qq, timeout in LISTEN_MC_SERVER:
+        time = max(time, timeout)
         data.append([McServer(*ips), qq])
     while True:
-        await asyncio.sleep(LISTEN_DELAY)
+        await asyncio.sleep(time)
         app.logger.info('mc_listener is running...')
         for item, qq in data:
             resp = item.update()

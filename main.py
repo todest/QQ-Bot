@@ -8,7 +8,7 @@ from graia.application.message.chain import MessageChain
 from graia.broadcast import Broadcast
 
 from app.core.controller import Controller
-from app.core.settings import *
+from app.core.config import *
 from app.extend.mc import mc_listener
 from app.extend.power import power
 

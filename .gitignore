@@ -1,5 +1,5 @@
 # settings
-app/core/settings.py
+app/core/config.py
 
 # pycache
 **/__pycache__/
