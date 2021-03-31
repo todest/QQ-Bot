@@ -1,18 +1,22 @@
-import time
+import asyncio
 import json
 import socket
 import struct
-import asyncio
+import time
+
 import jsonpath
-from app.plugin.base import Plugin
 from graia.application import MessageChain
 from graia.application.message.elements.internal import Plain
+
+from app.plugin.base import Plugin
+from app.util.dao import MysqlDao
+from app.util.decorator import permission_required
 
 
 class StatusPing:
     """ Get the ping status for the Minecraft server """
 
-    def __init__(self, host='mc.dusays.com', port=25756, timeout=10):
+    def __init__(self, host='127.0.0.1', port=25565, timeout=10):
         """ Init the hostname and the port """
         self._host = host
         self._port = int(port)
@@ -143,10 +147,47 @@ class McStatus(Plugin):
         'port: MC服务器端口号\r\n' \
         'timeout: 设置超时时间'
 
+    @permission_required(level='ADMIN')
+    async def set_default_mc(self, ip='127.0.0.1', port=25565):
+        default_ip, default_port = ip, port
+        with MysqlDao() as db:
+            res = db.update(
+                'UPDATE mc_server SET `default`=0 WHERE `default`=1'
+            )
+            res = db.query(
+                'SELECT COUNT(*) FROM mc_server WHERE ip=%s and port=%s',
+                [default_ip, default_port]
+            )
+            if res[0][0]:
+                res = db.update(
+                    'UPDATE mc_server SET `default`=1 WHERE ip=%s and port=%s',
+                    [default_ip, default_port]
+                )
+            else:
+                res = db.update(
+                    'INSERT INTO mc_server (ip, port, `default`, listen, delay) VALUES (%s, %s, 1, 0, 60)',
+                    [default_ip, default_port]
+                )
+        self.resp = MessageChain.create([Plain('设置成功！')])
+
     async def process(self):
         try:
+            with MysqlDao() as db:
+                res = db.query('SELECT ip,port FROM mc_server WHERE `default`=1')
+            default = [res[0][0], res[0][1]]
+            if self.msg:
+                if self.msg[0].startswith('set'):
+                    await self.set_default_mc(*self.msg[1:])
+                    return
+                elif self.msg[0].startswith('ld'):
+                    self.resp = MessageChain.create([
+                        Plain(f'默认服务器: {default[0]}:{default[1]}\r\n')
+                    ])
+                    return
+                else:
+                    default = self.msg
             self.resp = MessageChain.create([Plain(
-                StatusPing(*self.msg).get_status(str_format=True))
+                StatusPing(*default).get_status(str_format=True))
             ])
         except EnvironmentError as e:
             print(e)
