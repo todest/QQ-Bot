@@ -37,13 +37,14 @@ def ai_bot(question):
 
 
 class Chat(Plugin):
-    entry = [' ']
+    entry = ['. ']
     brief_help = '闲聊'
     full_help = '闲聊'
 
     async def process(self):
         msg = ''.join(i.dict()['text'] for i in self.message.get(Plain))[2:].strip()
         answer = '你说啥？' if not msg else ai_bot(msg).strip()
+        print(msg, answer)
         self.resp = MessageChain.create([
             Plain(answer if answer else '我好像忘了什么...')
         ])
