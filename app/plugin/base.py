@@ -37,6 +37,13 @@ class Plugin:
                 self.app: GraiaMiraiApplication = arg  # 程序执行主体
         self.resp = None
 
+    def get_qid(self):
+        """获取发言人QQ号"""
+        if hasattr(self, 'group'):
+            return self.member.id
+        elif hasattr(self, 'friend'):
+            return self.friend.id
+
     def _pre_check(self):
         """此方法检查是否为插件帮助指令"""
         if self.msg:

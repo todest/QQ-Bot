@@ -73,7 +73,7 @@ class Controller:
                     hasattr(self, 'friend') and self.friend.id in ACTIVE_USER):
                 obj.hidden = False
             if send_help and not obj.hidden:  # 主菜单帮助获取
-                if not obj.enable:
+                if not obj.enable and obj.get_qid() not in ADMIN_USER:
                     resp += obj.brief_help.replace('√', '×')
                 else:
                     resp += obj.brief_help

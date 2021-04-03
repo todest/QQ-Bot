@@ -63,7 +63,7 @@ def ai_bot(question):
 
 class Chat(Plugin):
     entry = ['. ']
-    brief_help = '闲聊'
+    brief_help = '\r\n[√]\t闲聊：.[空格]'
     full_help = '闲聊'
 
     async def process(self):
