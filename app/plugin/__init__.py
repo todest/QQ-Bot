@@ -13,5 +13,6 @@ __all__ = [
     'run',
     'power',
     'tell',
-    'test'
+    'test',
+    'chat'
 ]
