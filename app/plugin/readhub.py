@@ -48,7 +48,7 @@ class ReadHub(Plugin):
             font_path = os.sep.join([app_path(), 'resource', 'fonts', ''])
 
             h1 = ImageFont.truetype(font=font_path + 'msyhbd.ttc', size=int(font_size * 1.2))
-            font = ImageFont.truetype(font=font_path + 'Alzheimer.ttf', size=font_size)
+            font = ImageFont.truetype(font=font_path + 'simsun.ttc', size=font_size)
 
             dr.text((padding, padding), text=title, font=h1, fill='BLACK', spacing=4)
             dr.text((padding, padding * 2), text=news, font=font, fill='BLACK', spacing=4)
