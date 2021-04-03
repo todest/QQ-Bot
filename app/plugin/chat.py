@@ -19,6 +19,31 @@ def nonce_str():
     return rand_str
 
 
+no_answer = [
+    '我好像忘了什么...',
+    '你刚刚说什么？',
+    '啊？',
+    '我忘了你说的啥...',
+    '我好像失忆了...',
+    '等等，我想下要说什么!',
+    '没理解你什么意思',
+    '我听不懂你在说什么',
+    '不听不听，王八念经！',
+    '我有权保持沉默！',
+    'No Answer!'
+    'Pardon？',
+    'Sorry, can you say that again?',
+    'Could you repeat that please?',
+    'Come again?',
+    'I didn’t catch your meaning.',
+    'I don’t get it.',
+    'I didn’t follow you.',
+    'I can’t hear you.',
+    'Could you speak up a little bit?',
+    'Could you slow down a little bit?'
+]
+
+
 def ai_bot(question):
     params = {
         'app_id': APP_ID,
@@ -44,9 +69,8 @@ class Chat(Plugin):
     async def process(self):
         msg = ''.join(i.dict()['text'] for i in self.message.get(Plain))[2:].strip()
         answer = '你说啥？' if not msg else ai_bot(msg).strip()
-        print(msg, answer)
         self.resp = MessageChain.create([
-            Plain(answer if answer else '我好像忘了什么...')
+            Plain(answer if answer else random.choice(no_answer))
         ])
 
 
