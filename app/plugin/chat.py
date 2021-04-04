@@ -1,6 +1,5 @@
 import asyncio
 import hashlib
-import os
 import random
 import string
 import time
@@ -8,12 +7,11 @@ from urllib.parse import urlencode
 
 import requests
 from graia.application import MessageChain
-from graia.application.message.elements.internal import Plain, Voice
+from graia.application.message.elements.internal import Plain
 from retrying import retry
 
 from app.core.config import *
 from app.plugin.base import Plugin
-from app.util.tools import app_path
 
 
 def nonce_str():
@@ -47,7 +45,7 @@ no_answer = [
 ]
 
 
-@retry(stop_max_attempt_number=3)
+@retry(stop_max_attempt_number=5, wait_fixed=1000)
 def ai_bot(question):
     params = {
         'app_id': APP_ID,
@@ -74,16 +72,21 @@ class Chat(Plugin):
 
     async def process(self):
         msg = ''.join(i.dict()['text'] for i in self.message.get(Plain))[2:].strip()
-        answer = '你说啥？' if not msg else ai_bot(msg).strip()
-        answer = answer if answer else random.choice(no_answer)
-        if random.randint(0, 10):
-            self.resp = MessageChain.create([
-                Plain(answer)
-            ])
-        else:
-            self.resp = MessageChain.create([
-                Voice.fromLocalFile(os.sep.join([app_path(), 'tmp', 'rgb.png']))
-            ])
+        try:
+            answer = ai_bot(msg)
+        except Exception:
+            answer = random.choice(no_answer)
+        self.resp = MessageChain.create([
+            Plain(answer)
+        ])
+        # if random.randint(0, 10):
+        #     self.resp = MessageChain.create([
+        #         Plain(answer)
+        #     ])
+        # else:
+        #     self.resp = MessageChain.create([
+        #         Voice.fromLocalFile(os.sep.join([app_path(), 'tmp', 'rgb.png']))
+        #     ])
 
 
 if __name__ == '__main__':
