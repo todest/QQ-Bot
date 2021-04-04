@@ -1,5 +1,6 @@
 import asyncio
 import hashlib
+import os
 import random
 import string
 import time
@@ -7,10 +8,12 @@ from urllib.parse import urlencode
 
 import requests
 from graia.application import MessageChain
-from graia.application.message.elements.internal import Plain
+from graia.application.message.elements.internal import Plain, Voice
+from retrying import retry
 
 from app.core.config import *
 from app.plugin.base import Plugin
+from app.util.tools import app_path
 
 
 def nonce_str():
@@ -44,6 +47,7 @@ no_answer = [
 ]
 
 
+@retry(stop_max_attempt_number=3)
 def ai_bot(question):
     params = {
         'app_id': APP_ID,
@@ -57,8 +61,10 @@ def ai_bot(question):
     sign = hashlib.md5(encode_url.encode('utf-8')).hexdigest().upper()
     params.update({'sign': sign})
     url = 'https://api.ai.qq.com/fcgi-bin/nlp/nlp_textchat'
-    response = requests.post(url, data=params)
-    return response.json()['data']['answer']
+    response = str(requests.post(url, data=params).json()['data']['answer']).strip()
+    if not response:
+        raise Exception
+    return response
 
 
 class Chat(Plugin):
@@ -69,9 +75,15 @@ class Chat(Plugin):
     async def process(self):
         msg = ''.join(i.dict()['text'] for i in self.message.get(Plain))[2:].strip()
         answer = '你说啥？' if not msg else ai_bot(msg).strip()
-        self.resp = MessageChain.create([
-            Plain(answer if answer else random.choice(no_answer))
-        ])
+        answer = answer if answer else random.choice(no_answer)
+        if random.randint(0, 10):
+            self.resp = MessageChain.create([
+                Plain(answer)
+            ])
+        else:
+            self.resp = MessageChain.create([
+                Voice.fromLocalFile(os.sep.join([app_path(), 'tmp', 'rgb.png']))
+            ])
 
 
 if __name__ == '__main__':
