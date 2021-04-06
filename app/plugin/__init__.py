@@ -14,5 +14,6 @@ __all__ = [
     'power',
     'tell',
     'test',
-    'chat'
+    'chat',
+    'dujitang'
 ]
