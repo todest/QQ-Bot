@@ -5,7 +5,7 @@ from graia.application import MessageChain, Friend
 from graia.application.message.elements.internal import Plain, At, Face
 
 from app.entities.user import BotUser
-from app.plugin.base import Plugin
+from app.plugin.plugin import Plugin
 from app.resource.earn_quot import *
 from app.util.dao import MysqlDao
 from app.util.tools import isstartswith
@@ -96,7 +96,7 @@ class Game(Plugin):
                 if int(user.get_points()) < point:
                     self.point_not_enough()
                     return
-                target = self.message.get(At)[0]
+                target = self.message[At][0]
                 if not target:
                     self.args_error()
                     return
@@ -118,7 +118,7 @@ class Game(Plugin):
         elif isstartswith(self.msg[0], ['踢', 'kick']):
             """踢"""
             try:
-                target = self.message.get(At)
+                target = self.message[At]
 
                 # 判断是否有At，如果无，要求报错并返回
                 if not target:
@@ -182,7 +182,7 @@ class Game(Plugin):
                 self.unkown_error()
         # elif isstartswith(self.msg[0], ['炸', 'bomb']):
         # 	try:
-        # 		target = self.message.get(At)
+        # 		target = self.message[At]
         #
         # 		# 判断是否有At，如果无，要求报错并返回
         # 		if not target:
@@ -209,7 +209,7 @@ class Game(Plugin):
         # 		self.unkown_error()
         elif isstartswith(self.msg[0], ['偷', 'steal']):
             try:
-                target = self.message.get(At)
+                target = self.message[At]
 
                 # 判断是否有At，如果无，要求报错并返回
                 if not target:

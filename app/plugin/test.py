@@ -2,7 +2,7 @@ from graia.application import MessageChain
 from graia.application.message.elements.internal import Plain
 
 from app.core.settings import ACTIVE_USER
-from app.plugin.base import Plugin
+from app.plugin.plugin import Plugin
 from app.util.decorator import permission_required
 
 

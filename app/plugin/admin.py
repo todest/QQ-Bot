@@ -6,7 +6,7 @@ from graia.application.message.elements.internal import Plain
 from app.core.settings import *
 from app.entities.group import BotGroup
 from app.entities.user import BotUser
-from app.plugin.base import Plugin
+from app.plugin.plugin import Plugin
 from app.util.decorator import permission_required
 from app.util.tools import isstartswith
 

@@ -11,7 +11,7 @@ from graia.application.message.elements.internal import Plain
 from retrying import retry
 
 from app.core.config import *
-from app.plugin.base import Plugin
+from app.plugin.plugin import Plugin
 
 
 def nonce_str():
@@ -67,7 +67,7 @@ def ai_bot(question):
 
 class Chat(Plugin):
     entry = ['. ']
-    brief_help = '\r\n[√]\t闲聊：.[空格]'
+    brief_help = '\r\n[√]\t闲聊：[空格]'
     full_help = '闲聊'
 
     async def process(self):

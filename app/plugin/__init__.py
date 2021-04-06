@@ -1,5 +1,5 @@
 __all__ = [
-    'base',
+    'plugin',
     'jrrp',
     'hitokoto',
     'mcinfo',

@@ -1,4 +1,4 @@
-from app.plugin.base import Plugin
+from app.plugin.plugin import Plugin
 from graia.application import MessageChain, Image
 
 

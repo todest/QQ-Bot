@@ -5,7 +5,7 @@ import platform
 from graia.application import MessageChain, Image
 from graia.application.message.elements.internal import Plain
 
-from app.plugin.base import Plugin
+from app.plugin.plugin import Plugin
 from app.util.tools import app_path
 
 

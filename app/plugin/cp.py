@@ -1,7 +1,7 @@
 import time
 import random
 from app.resource.love import *
-from app.plugin.base import Plugin
+from app.plugin.plugin import Plugin
 from graia.application import MessageChain
 
 from graia.application.message.elements.internal import At, Plain, Image

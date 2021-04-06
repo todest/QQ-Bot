@@ -8,7 +8,7 @@ from PIL import Image, ImageDraw, ImageFont
 from graia.application import MessageChain
 from graia.application.message.elements.internal import Plain, Image as Img
 
-from app.plugin.base import Plugin
+from app.plugin.plugin import Plugin
 from app.util.tools import line_break, app_path
 
 

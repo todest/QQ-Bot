@@ -4,7 +4,7 @@ import requests
 from graia.application import MessageChain
 from graia.application.message.elements.internal import Plain
 
-from app.plugin.base import Plugin
+from app.plugin.plugin import Plugin
 
 
 class NetEase(Plugin):

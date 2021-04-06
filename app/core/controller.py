@@ -1,5 +1,3 @@
-import random
-
 from graia.application import GraiaMiraiApplication
 from graia.application.friend import Friend
 from graia.application.group import Group, Member
@@ -8,7 +6,7 @@ from graia.application.message.elements.internal import Plain
 
 from app.core.settings import *
 from app.plugin import *
-from app.util.msg import *
+from app.trigger import *
 from app.util.tools import isstartswith
 
 
@@ -33,6 +31,19 @@ class Controller:
         send_help = False  # 是否为主菜单帮助
         resp = '[√]\t帮助：help'
 
+        # 自定义预非指令触发器
+        for trig in trigger.Trigger.__subclasses__():
+            obj = None
+            if hasattr(self, 'friend'):
+                obj = trig(self.message, self.friend, self.app)
+            elif hasattr(self, 'group'):
+                obj = trig(self.message, self.group, self.member, self.app)
+            if not obj.enable:
+                continue
+            await obj.process()
+            if obj.as_last:
+                break
+
         # 判断是否在权限允许列表
         if hasattr(self, 'friend'):
             if self.friend.id not in ACTIVE_USER:
@@ -41,17 +52,6 @@ class Controller:
             if self.group.id not in ACTIVE_GROUP:
                 return
         if msg[0] not in '.,;!?。，；！？/\\':  # 判断是否为指令
-            if hasattr(self, 'group'):
-                save(self.group.id, self.member.id, msg)
-                probability = random.randint(0, 101)
-                if (probability < 1) and repeated(self.group.id, self.app.connect_info.account, 2):
-                    await self.app.sendGroupMessage(self.group, self.message.asSendable())
-                    save(self.group.id, self.app.connect_info.account, msg)
-                    self.app.logger.info('Random Repeat: ' + msg)
-                if repeated(self.group.id, self.app.connect_info.account, 2):
-                    await self.app.sendGroupMessage(self.group, self.message.asSendable())
-                    save(self.group.id, self.app.connect_info.account, msg)
-                    self.app.logger.info('Follow Repeat: ' + msg)
             return
 
         # 指令规范化
@@ -63,12 +63,12 @@ class Controller:
             send_help = True
 
         # 加载插件
-        for plugin in base.Plugin.__subclasses__():
+        for plug in plugin.Plugin.__subclasses__():
             obj = None
             if hasattr(self, 'friend'):
-                obj = plugin(self.message, self.friend, self.app)
+                obj = plug(self.message, self.friend, self.app)
             elif hasattr(self, 'group'):
-                obj = plugin(self.message, self.group, self.member, self.app)
+                obj = plug(self.message, self.group, self.member, self.app)
             if (hasattr(self, 'group') and self.member.id in ACTIVE_USER) or (
                     hasattr(self, 'friend') and self.friend.id in ACTIVE_USER):
                 obj.hidden = False
