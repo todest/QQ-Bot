@@ -7,7 +7,7 @@ from graia.application.group import Group, Member
 from graia.application.message.chain import MessageChain
 from graia.broadcast import Broadcast
 
-from app.core.config import *
+from app.core.config import Config
 from app.core.controller import Controller
 from app.extend.mc import mc_listener
 from app.extend.power import power
@@ -15,12 +15,13 @@ from app.extend.schedule import custom_schedule
 
 loop = asyncio.get_event_loop()
 bcc = Broadcast(loop=loop)
+config = Config()
 bot = GraiaMiraiApplication(
     broadcast=bcc,
     connect_info=Session(
-        host='http://' + LOGIN_HOST + ':' + LOGIN_PORT,
-        authKey=AUTH_KEY,
-        account=LOGIN_QQ,
+        host='http://' + config.LOGIN_HOST + ':' + config.LOGIN_PORT,
+        authKey=config.AUTH_KEY,
+        account=config.LOGIN_QQ,
         websocket=True
     )
 )

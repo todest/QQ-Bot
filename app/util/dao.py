@@ -1,16 +1,17 @@
 import pymysql
 
-from app.core.config import *
+from app.core.config import Config
 
 
 class MysqlDao:
     def __enter__(self):
         try:
+            config = Config()
             self.db = pymysql.connect(
-                host=LOGIN_HOST,
-                user=MYSQL_USER,
-                password=MYSQL_PWD,
-                database=MYSQL_DATABASE
+                host=config.LOGIN_HOST,
+                user=config.MYSQL_USER,
+                password=config.MYSQL_PWD,
+                database=config.MYSQL_DATABASE
             )
             self.cur = self.db.cursor()
             return self
