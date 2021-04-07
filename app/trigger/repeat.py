@@ -8,6 +8,8 @@ class Repeat(Trigger):
     async def process(self):
         if not hasattr(self, 'group'):
             return
+        if self.msg[0][0] in '.,;!?。，；！？/\\':  # 判断是否为指令
+            return
         probability = random.randint(0, 101)
         if (probability < 1) and repeated(self.group.id, self.app.connect_info.account, 2):
             await self.app.sendGroupMessage(self.group, self.message.asSendable())
