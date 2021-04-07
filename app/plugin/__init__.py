@@ -1,5 +1,6 @@
 __all__ = [
     'plugin',
+    'power',
     'jrrp',
     'hitokoto',
     'mcinfo',
@@ -11,7 +12,6 @@ __all__ = [
     'randbg',
     'admin',
     'run',
-    'power',
     'tell',
     'test',
     'chat',

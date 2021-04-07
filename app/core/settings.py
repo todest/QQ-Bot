@@ -1,11 +1,15 @@
 from app.util.dao import MysqlDao
 
 ACTIVE_GROUP = {}
+ID_TO_GROUP = {}
 with MysqlDao() as db:
-    res = db.query('SELECT group_id, permission FROM `group` WHERE active=1')
-for (gid, permit) in res:
+    res = db.query('SELECT id, group_id, permission FROM `group` WHERE active=1')
+for (sid, gid, permit) in res:
     ACTIVE_GROUP.update({
         int(gid): str(permit).split(',')
+    })
+    ID_TO_GROUP.update({
+        int(sid): int(gid)
     })
 
 ACTIVE_USER = {}

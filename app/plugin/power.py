@@ -1,6 +1,5 @@
 import subprocess
 import sys
-
 from graia.application import MessageChain
 from graia.application.message.elements.internal import At, Plain
 
@@ -54,6 +53,8 @@ class Admin(Plugin):
                 elif isstartswith(self.msg[0], 'r'):
                     restart('-r', *shell)
                 sys.exit()
+            elif isstartswith(self.msg[0], 'c'):
+                DEBUG = True
             else:
                 self.args_error()
                 return

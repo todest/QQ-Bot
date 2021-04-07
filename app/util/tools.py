@@ -3,15 +3,18 @@ import sys
 from typing import List
 
 
-def parse_args(args) -> list:
+def parse_args(args, keep_head=False) -> list:
     """拆分指令参数为一个列表，并去除入口指令
 
     :param args: str 字符串
+    :param keep_head: bool 保留头部
+
     """
     args: List[str] = args.strip().split()
     for i in range(len(args)):
         args[i].strip()
-    args.pop(0)
+    if not keep_head:
+        args.pop(0)
     return args
 
 

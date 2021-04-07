@@ -4,6 +4,7 @@ from graia.application.group import Group, Member
 from graia.application.message.chain import MessageChain
 from graia.application.message.elements.internal import Plain
 
+from app.core.config import DEBUG, ONLINE
 from app.core.settings import *
 from app.plugin import *
 from app.trigger import *
@@ -43,6 +44,8 @@ class Controller:
             await obj.process()
             if obj.as_last:
                 break
+        if ONLINE and DEBUG:
+            return
 
         # 判断是否在权限允许列表
         if hasattr(self, 'friend'):

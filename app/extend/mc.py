@@ -14,9 +14,9 @@ class McServer:
     players = set()
     description = ''
 
-    def __init__(self, ip='127.0.0.1', port=25565):
-        self.ip = ip
-        self.port = port
+    def __init__(self, default_ip='127.0.0.1', default_port=25565):
+        self.ip = default_ip
+        self.port = default_port
         self.update(init=True)
 
     def update(self, init=False):
