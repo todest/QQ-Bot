@@ -14,15 +14,14 @@ class ChangeMode(Trigger):
     @permission_required(level='ADMIN')
     async def change_mode(self):
         config = Config()
-        if config.DEBUG:
-            await self.do_send(MessageChain.create([
-                Plain('>> 已退出DEBUG模式！\t\n>> 服务端进入工作状态！\r\n'),
-                Plain('>> 消息来自%s端!' % ('服务' if config.ONLINE else 'DEBUG'))
-            ]))
-        else:
-            await self.do_send(MessageChain.create([
-                Plain('>> 已进入DEBUG模式！\r\n>> 服务端进入休眠状态！\r\n'),
-                Plain('>> 消息来自%s端!' % ('服务' if config.ONLINE else 'DEBUG'))
-            ]))
+        if config.ONLINE:
+            if config.DEBUG:
+                await self.do_send(MessageChain.create([
+                    Plain('>> 已退出DEBUG模式！\t\n>> 服务端进入工作状态！'),
+                ]))
+            else:
+                await self.do_send(MessageChain.create([
+                    Plain('>> 已进入DEBUG模式！\r\n>> 服务端进入休眠状态！')
+                ]))
         config.change_debug()
         self.as_last = True

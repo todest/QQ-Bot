@@ -37,7 +37,7 @@ async def group_message_listener(message: MessageChain, group: Group, member: Me
     event = Controller(message, group, member, app)
     await event.process_event()
 
-
-asyncio.run(custom_schedule(loop, bcc, bot))
+if not config.DEBUG or not config.ONLINE:
+    asyncio.run(custom_schedule(loop, bcc, bot))
 loop.create_task(power(bot, sys.argv))
 bot.launch_blocking()

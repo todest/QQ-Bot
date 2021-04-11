@@ -24,6 +24,8 @@ class Config:
         self.APP_KEY = self.cf.get('tencent_api', 'app_key')
 
     def change_debug(self):
+        if not self.ONLINE:
+            return
         if self.DEBUG:
             self.cf.set('bot', 'debug', 'false')
             self.DEBUG = False
