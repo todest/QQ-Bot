@@ -9,7 +9,6 @@ from graia.broadcast import Broadcast
 
 from app.core.config import Config
 from app.core.controller import Controller
-from app.extend.mc import mc_listener
 from app.extend.power import power
 from app.extend.schedule import custom_schedule
 
@@ -40,6 +39,5 @@ async def group_message_listener(message: MessageChain, group: Group, member: Me
 
 
 asyncio.run(custom_schedule(loop, bcc, bot))
-loop.create_task(mc_listener(bot))
 loop.create_task(power(bot, sys.argv))
 bot.launch_blocking()

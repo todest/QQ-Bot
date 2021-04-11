@@ -1,7 +1,7 @@
 __all__ = [
     'trigger',
-    'savemsg',
     'mode',
+    'savemsg',
     'flashpng',
     'repeat'
 ]

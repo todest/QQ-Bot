@@ -1,12 +1,14 @@
-import asyncio
+import os
+import pickle
+import time
 
 import jsonpath
-from graia.application import MessageChain
-from graia.application.context import enter_context
+from graia.application import MessageChain, enter_context
 from graia.application.message.elements.internal import Plain
 
 from app.core.settings import *
 from app.plugin.mcinfo import StatusPing
+from app.util.tools import app_path
 
 
 class McServer:
@@ -18,6 +20,7 @@ class McServer:
         self.ip = default_ip
         self.port = default_port
         self.update(init=True)
+        self.time = time.time()
 
     def update(self, init=False):
         players = self.players.copy()
@@ -68,30 +71,33 @@ class McServer:
             self.status = status
             self.players = players
             self.description = description
+            self.time = time.time()
             if resp_content.__root__:
                 resp.plus(resp_content)
                 return resp
             return None
 
 
-async def mc_listener(app):
+async def mc_listener(app, delay_sec):
     if not LISTEN_MC_SERVER:
         return
-    data = []
-    time = -1
-    for ips, qq, timeout in LISTEN_MC_SERVER:
-        time = max(time, timeout)
-        data.append([McServer(*ips), qq])
-    while True:
-        await asyncio.sleep(time)
-        app.logger.info('mc_listener is running...')
-        for item, qq in data:
-            resp = item.update()
-            if not resp:
+    if not os.path.exists(path := os.sep.join([app_path(), 'tmp', 'mcserver'])):
+        os.makedirs(path)
+    for ips, qq, _ in LISTEN_MC_SERVER:
+        if os.path.exists(file := os.sep.join([path, f'{ips[0]}_{str(ips[1])}.dat'])):
+            with open(file, 'rb') as f:
+                obj = pickle.load(f)
+        else:
+            obj = McServer(*ips)
+        if time.time() - obj.time > int(1.5 * delay_sec):
+            obj = McServer(*ips)
+        resp = obj.update()
+        with open(file, 'wb') as f:
+            pickle.dump(obj, f)
+        if not resp:
+            continue
+        for target in qq:
+            target = await app.getFriend(target)
+            if not target:
                 continue
-            for target in qq:
-                target = await app.getFriend(target)
-                if not target:
-                    continue
-                with enter_context(app=app):
-                    await app.sendFriendMessage(target, resp)
+            await app.sendFriendMessage(target, resp)
