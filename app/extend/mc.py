@@ -3,12 +3,11 @@ import pickle
 import time
 
 import jsonpath
-from graia.application import MessageChain, enter_context
+from graia.application import MessageChain
 from graia.application.message.elements.internal import Plain
 
 from app.core.settings import *
 from app.plugin.mcinfo import StatusPing
-from app.util.tools import app_path
 
 
 class McServer:
@@ -78,32 +77,27 @@ class McServer:
             return None
 
 
-async def mc_listener(app, delay_sec):
-    if not LISTEN_MC_SERVER:
+async def mc_listener(app, path, ips, qq, delay_sec):
+    if os.path.exists(file := os.sep.join([path, f'{ips[0]}_{str(ips[1])}.dat'])):
+        with open(file, 'rb') as f:
+            obj = pickle.load(f)
+    else:
+        obj = McServer(*ips)
+    if time.time() - obj.time > int(1.5 * delay_sec):
+        obj = McServer(*ips)
+    resp = obj.update()
+    with open(file, 'wb') as f:
+        pickle.dump(obj, f)
+    if not resp:
         return
-    if not os.path.exists(path := os.sep.join([app_path(), 'tmp', 'mcserver'])):
-        os.makedirs(path)
-    for ips, qq, _ in LISTEN_MC_SERVER:
-        if os.path.exists(file := os.sep.join([path, f'{ips[0]}_{str(ips[1])}.dat'])):
-            with open(file, 'rb') as f:
-                obj = pickle.load(f)
-        else:
-            obj = McServer(*ips)
-        if time.time() - obj.time > int(1.5 * delay_sec):
-            obj = McServer(*ips)
-        resp = obj.update()
-        with open(file, 'wb') as f:
-            pickle.dump(obj, f)
-        if not resp:
-            continue
-        for target in qq:
-            if target[0] == 'f':
-                target = await app.getFriend(int(target[1:]))
-                if not target:
-                    continue
-                await app.sendFriendMessage(target, resp)
-            elif target[0] == 'g':
-                target = await app.getGroup(ID_TO_GROUP[int(target[1:])])
-                if not target:
-                    continue
-                await app.sendGroupMessage(target, resp)
+    for target in qq:
+        if target[0] == 'f':
+            target = await app.getFriend(int(target[1:]))
+            if not target:
+                continue
+            await app.sendFriendMessage(target, resp)
+        elif target[0] == 'g':
+            target = await app.getGroup(ID_TO_GROUP[int(target[1:])])
+            if not target:
+                continue
+            await app.sendGroupMessage(target, resp)
