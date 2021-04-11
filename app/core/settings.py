@@ -31,5 +31,5 @@ with MysqlDao() as db:
     res = db.query('SELECT ip,port,report,delay FROM mc_server WHERE listen=1')
 for (ip, port, report, delay) in res:
     LISTEN_MC_SERVER.append(
-        [[ip, int(port)], [int(i) for i in str(report).split(',')], delay]
+        [[ip, int(port)], [i for i in str(report).split(',')], delay]
     )

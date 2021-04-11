@@ -97,7 +97,13 @@ async def mc_listener(app, delay_sec):
         if not resp:
             continue
         for target in qq:
-            target = await app.getFriend(target)
-            if not target:
-                continue
-            await app.sendFriendMessage(target, resp)
+            if target[0] == 'f':
+                target = await app.getFriend(int(target[1:]))
+                if not target:
+                    continue
+                await app.sendFriendMessage(target, resp)
+            elif target[0] == 'g':
+                target = await app.getGroup(ID_TO_GROUP[int(target[1:])])
+                if not target:
+                    continue
+                await app.sendGroupMessage(target, resp)
