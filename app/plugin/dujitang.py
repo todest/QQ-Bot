@@ -1,16 +1,18 @@
 import asyncio
 
-import requests
 from graia.application import MessageChain
 from graia.application.message.elements.internal import Plain
 
 from app.plugin.plugin import Plugin
+from app.util.dao import MysqlDao
 
 
 def _get_djt() -> str:
-    api_url = 'https://api.cyfan.top/dujitang'
-    req = requests.get(api_url).content.decode('utf-8')
-    return req[16:-3]
+    with MysqlDao() as db:
+        res = db.query(
+            'SELECT content FROM soul WHERE id>=(SELECT FLOOR(RAND()*COUNT(*)) FROM soul) ORDER BY id LIMIT 1'
+        )
+        return res[0][0]
 
 
 class DuJiTang(Plugin):

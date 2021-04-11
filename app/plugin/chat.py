@@ -47,15 +47,16 @@ no_answer = [
 
 @retry(stop_max_attempt_number=5, wait_fixed=1000)
 def ai_bot(question):
+    config = Config()
     params = {
-        'app_id': APP_ID,
-        'session': LOGIN_QQ,
+        'app_id': config.APP_ID,
+        'session': config.LOGIN_QQ,
         'time_stamp': int(time.time()),
         'nonce_str': nonce_str(),
         'question': question
     }
     encode_url = urlencode(sorted(params.items(), key=lambda k: k[0]))
-    encode_url += f'&app_key={APP_KEY}'
+    encode_url += f'&app_key={config.APP_KEY}'
     sign = hashlib.md5(encode_url.encode('utf-8')).hexdigest().upper()
     params.update({'sign': sign})
     url = 'https://api.ai.qq.com/fcgi-bin/nlp/nlp_textchat'
